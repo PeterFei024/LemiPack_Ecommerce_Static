@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>乐美包装电商平台</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<style>
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .tab-content { display: none; }
+    .tab-active { display: block; }
+    .step { display: none; }
+    .step-active { display: block; }
+    .submenu-section { display: none; }
+    .submenu-section-active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  </style>
+</head>
+<body class="bg-gray-100">
+<!-- 顶部导航 -->
+<header class="bg-blue-800 text-white sticky top-0 z-50 h-20 shadow-lg">
+<div class="container mx-auto px-4 flex items-center justify-between h-full">
+<div class="flex items-center pl-0">
+<span class="iconify text-2xl" data-icon="mdi:package-variant"></span>
+<h1 class="text-lg font-bold ml-2">乐美包装</h1>
+</div>
+<nav class="flex items-center space-x-4 flex-1 justify-center">
+<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="home">首页</button>
+<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="configurator">订单配置</button>
+<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="orders">我的订单</button>
+<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="finance">财务信息</button>
+<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="design-management">画稿管理</button>
+<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="contact">联系我们</button>
+</nav>
+<div class="flex items-center space-x-3 flex-shrink-0">
+<div class="relative">
+<input class="bg-blue-700 rounded-full py-1.5 px-3 text-white placeholder-blue-200 w-48 text-sm" placeholder="搜索产品..." type="text"/>
+<span class="iconify absolute right-2 top-1.5 text-blue-200 text-sm" data-icon="mdi:magnify"></span>
+</div>
+<button class="bg-green-600 hover:bg-green-500 text-white py-1.5 px-4 rounded-full flex items-center text-sm whitespace-nowrap">
+<span class="iconify mr-1 text-sm" data-icon="mdi:cart"></span>购物车
+        </button>
+<div class="relative">
+<select id="languageSelect" class="bg-blue-700 hover:bg-blue-600 text-white py-1.5 px-3 rounded-lg cursor-pointer appearance-none pr-6 border border-blue-600 text-sm">
+<option value="zh">中文</option>
+<option value="en">English</option>
+<option value="id">Bahasa Indonesia</option>
+</select>
+<span class="iconify absolute right-1 top-1.5 text-white pointer-events-none text-sm" data-icon="mdi:chevron-down"></span>
+</div>
+<div class="bg-blue-700 rounded-lg px-3 py-1.5 text-xs max-w-xs">
+<div class="text-white font-semibold whitespace-nowrap">章三</div>
+<div class="text-blue-200 text-xs truncate">收货地址: 昆山市新南西路369号 <button class="text-blue-300 hover:text-white underline ml-1">变更</button></div>
+</div>
+</div>
+</div>
+</header>
+<!-- 页面内容区 -->
+<main class="container mx-auto p-6 max-w-6xl">
+<!-- 首页 -->
+<section class="tab-content tab-active" id="home">
+<div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+<h2 class="text-2xl font-bold text-blue-800 mb-6">公司介绍</h2>
+<div class="flex items-center">
+<div class="w-2/3 pr-8">
+<p class="text-gray-700 mb-4 leading-relaxed">
+              乐美包装是领先的包装材料解决方案提供商，专注于为食品饮料、电子产品等行业提供高质量包装产品。拥有超过10年行业经验，服务全球500+企业客户。
+            </p>
+<p class="text-gray-700 mb-6 leading-relaxed">
+              我们提供纸箱、泡沫、胶带等全品类包装材料，支持定制化设计和批量生产，满足不同行业的包装需求。
+            </p>
+<div class="flex space-x-4">
+<button class="bg-blue-600 hover:bg-blue-500 text-white py-3 px-8 rounded-full font-semibold transition">
+                了解更多
+              </button>
+<button class="bg-green-600 hover:bg-green-500 text-white py-3 px-8 rounded-full font-semibold transition">
+                免费样品
+              </button>
+</div>
+</div>
+<div class="w-1/3">
+<img alt="Company building exterior view" class="rounded-xl shadow-md" id="1" src="../lemipack_images/home_1.png"/>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-2xl shadow-lg p-8">
+<h2 class="text-2xl font-bold text-blue-800 mb-6">热销产品</h2>
+<div class="grid grid-cols-3 gap-8">
+<!-- 产品卡片 -->
+<div class="product-card bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition hover:shadow-lg">
+<img alt="Cardboard box for packaging" class="w-full h-48 object-cover" id="2" src="../lemipack_images/standard_1.png"/>
+<div class="p-5">
+<h3 class="text-lg font-semibold text-gray-800 mb-2">200S食品包装盒</h3>
+<div class="flex justify-between mb-3">
+<span class="text-gray-600">规格: 200S</span>
+<span class="text-green-600 font-bold">¥45.80/箱</span>
+</div>
+<div class="flex justify-between">
+<button class="text-blue-600 hover:text-blue-500 flex items-center">
+<span class="iconify mr-1" data-icon="mdi:eye"></span> 详情
+                </button>
+<button class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm">
+                  加入购物车
+                </button>
+</div>
+</div>
+</div>
+<div class="product-card bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition hover:shadow-lg">
+<img alt="Foam packaging material" class="w-full h-48 object-cover" id="3" src="../lemipack_images/standard_2.png"/>
+<div class="p-5">
+<h3 class="text-lg font-semibold text-gray-800 mb-2">EPE泡沫包装</h3>
+<div class="flex justify-between mb-3">
+<span class="text-gray-600">规格: 50×30cm</span>
+<span class="text-green-600 font-bold">¥28.50/卷</span>
+</div>
+<div class="flex justify-between">
+<button class="text-blue-600 hover:text-blue-500 flex items-center">
+<span class="iconify mr-1" data-icon="mdi:eye"></span> 详情
+                </button>
+<button class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm">
+                  加入购物车
+                </button>
+</div>
+</div>
+</div>
+<div class="product-card bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition hover:shadow-lg">
+<img alt="Custom printed packaging tape" class="w-full h-48 object-cover" id="4" src="../lemipack_images/standard_3.png"/>
+<div class="p-5">
+<h3 class="text-lg font-semibold text-gray-800 mb-2">定制胶带</h3>
+<div class="flex justify-between mb-3">
+<span class="text-gray-600">规格: 48mm×100m</span>
+<span class="text-green-600 font-bold">¥15.20/卷</span>
+</div>
+<div class="flex justify-between">
+<button class="text-blue-600 hover:text-blue-500 flex items-center">
+<span class="iconify mr-1" data-icon="mdi:eye"></span> 详情
+                </button>
+<button class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm">
+                  加入购物车
+                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 订单配置工具 -->
+<section class="tab-content" id="configurator">
+<div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+<div class="flex justify-between items-center mb-8">
+<h2 class="text-2xl font-bold text-blue-800">订单配置工具</h2>
+<div class="flex space-x-2">
+<button class="step-btn bg-blue-600 text-white px-4 py-2 rounded-lg" data-step="step1">选择配置与设计</button>
+<button class="step-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg" data-step="step2">下单</button>
+</div>
+</div>
+<!-- 步骤1: 选择配置与设计（合并后的步骤） -->
+<div class="step step-active" id="step1">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-semibold text-gray-800">选择配置与设计</h3>
+<div class="flex items-center space-x-2">
+<input id="filter-search" class="filter-input bg-white border border-gray-300 rounded-lg px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 w-64" type="text" placeholder="搜索设计描述/产品代码..."/>
+<span class="iconify text-gray-400" data-icon="mdi:magnify"></span>
+</div>
+</div>
+<div class="flex gap-6">
+<!-- 左侧筛选条件区域（占1/3） -->
+<div class="w-1/3 bg-gray-50 rounded-xl p-6 border border-gray-200">
+<h4 class="text-lg font-semibold text-gray-800 mb-4">筛选条件</h4>
+<div class="space-y-4">
+<div>
+<label class="block text-gray-700 mb-2 font-medium">规格选择 (Format)</label>
+<select id="filter-format" class="filter-select w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+<option value="">全部规格</option>
+<option value="200S">200S 160C*4.2U-Straw</option>
+<option value="LBA1000B">LBA1000B</option>
+<option value="LBA100B-H">LBA100B-H</option>
+<option value="1000B">1000B</option>
+</select>
+</div>
+<div>
+<label class="block text-gray-700 mb-2 font-medium">灌装机型号</label>
+<select id="filter-machine" class="filter-select w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+<option value="">全部型号</option>
+<option value="Tetra Pak A3">Tetra Pak A3</option>
+<option value="SIG CFA122">SIG CFA122</option>
+<option value="乐美 LP200">乐美 LP200</option>
+</select>
+</div>
+<div>
+<label class="block text-gray-700 mb-2 font-medium">填充物类型</label>
+<select id="filter-filling" class="filter-select w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+<option value="">全部类型</option>
+<option value="UHT牛奶">UHT牛奶</option>
+<option value="果汁">果汁</option>
+<option value="豆奶">豆奶</option>
+<option value="乳制品">乳制品</option>
+<option value="汤类">汤类</option>
+</select>
+</div>
+<div>
+<label class="block text-gray-700 mb-2 font-medium">材料结构</label>
+<select id="filter-material" class="filter-select w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+<option value="">全部材料</option>
+<option value="PE-Al-Paper">PE-Al-Paper</option>
+<option value="PET-Paper">PET-Paper</option>
+<option value="Paper">Paper</option>
+<option value="PP">PP</option>
+</select>
+</div>
+<div>
+<label class="block text-gray-700 mb-2 font-medium">产品组</label>
+<select id="filter-product-group" class="filter-select w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+<option value="">全部产品组</option>
+<option value="10-无菌包">10-无菌包</option>
+<option value="20-标准包">20-标准包</option>
+<option value="30-定制包">30-定制包</option>
+<option value="40-特殊包">40-特殊包</option>
+</select>
+</div>
+<div>
+<label class="block text-gray-700 mb-2 font-medium">系列</label>
+<select id="filter-series" class="filter-select w-full bg-white border border-gray-300 rounded-lg px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+<option value="">全部系列</option>
+<option value="片材">片材</option>
+<option value="卷材">卷材</option>
+<option value="盖子">盖子</option>
+</select>
+</div>
+<div>
+<label class="block text-gray-700 mb-2 font-medium">认证要求</label>
+<div class="space-y-2">
+<label class="flex items-center">
+<input id="filter-pefc" class="filter-checkbox rounded text-blue-600" type="checkbox"/>
+<span class="ml-2">PEFC</span>
+</label>
+<label class="flex items-center">
+<input id="filter-fsc" class="filter-checkbox rounded text-blue-600" type="checkbox"/>
+<span class="ml-2">FSC</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- 右侧产品展示区域（占2/3） -->
+<div class="w-2/3">
+<div id="products-container" class="space-y-6">
+<!-- 产品将按规格分类显示在这里 -->
+</div>
+</div>
+</div>
+<div class="mt-8 flex justify-end">
+<button class="next-step bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold" data-target="step2">
+              下一步
+            </button>
+</div>
+</div>
+<!-- 步骤2: Order Placing -->
+<div class="step" id="step2">
+<h3 class="text-xl font-semibold text-gray-800 mb-6">下单 (Order Placing)</h3>
+<div class="flex mb-8 gap-8">
+<div class="w-1/2">
+<div class="bg-gray-100 rounded-xl p-4 mb-4 overflow-hidden">
+<img alt="产品主图" class="w-full h-96 object-cover rounded-lg mb-3" id="mainProductImg" src="../customer_designs/RFG/RFG-1.jpg"/>
+<div class="flex space-x-2 overflow-x-auto">
+<img alt="细节图1" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('mainProductImg').src=this.src" src="../customer_designs/RFG/RFG-2.jpg"/>
+<img alt="细节图2" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('mainProductImg').src=this.src" src="../customer_designs/RFG/RFG-3.jpg"/>
+<img alt="细节图4" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('mainProductImg').src=this.src" src="../customer_designs/RFG/RFG-4.jpg"/>
+<img alt="细节图4" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('mainProductImg').src=this.src" src="../customer_designs/RFG/RFG-5.jpg"/>
+<img alt="细节图4" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('mainProductImg').src=this.src" src="../customer_designs/RFG/RFG-6.jpg"/>
+</div>
+</div>
+</div>
+<div class="w-1/2">
+<div class="bg-gray-50 rounded-xl p-6 mb-6">
+<h4 class="font-semibold text-lg text-gray-800 mb-4">产品信息</h4>
+<div class="space-y-3">
+<div class="flex justify-between">
+<span class="text-gray-600">产品名称:</span>
+<span class="font-medium">饮料包装设计 #DRK-2023</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">物料号:</span>
+<span class="font-medium">NP-20345-1</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">规格:</span>
+<span class="font-medium">200S</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">材料结构:</span>
+<span class="font-medium">PE-Al-Paper</span>
+</div>
+</div>
+</div>
+<div class="bg-gray-50 rounded-xl p-6">
+<h4 class="font-semibold text-lg text-gray-800 mb-4">采购信息</h4>
+<div class="space-y-4">
+<div>
+<label class="block text-gray-700 mb-2">数量</label>
+<div class="flex items-center">
+<button class="bg-gray-200 px-4 py-2 rounded-l-lg">-</button>
+<input class="w-20 text-center border-y border-gray-200 py-2" type="number" value="100"/>
+<button class="bg-gray-200 px-4 py-2 rounded-r-lg">+</button>
+<span class="ml-4 text-gray-600">(单位: 箱)</span>
+</div>
+</div>
+<div>
+<label class="block text-gray-700 mb-2">期望送达日期</label>
+<input class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2" type="date"/>
+</div>
+<div>
+<label class="block text-gray-700 mb-2">特殊要求</label>
+<textarea class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2"></textarea>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 flex justify-between">
+<button class="prev-step bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-3 rounded-lg font-semibold" data-target="step1">
+              上一步
+            </button>
+<button class="bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-lg font-semibold" onclick="confirmOrder()">
+              确认下单
+            </button>
+</div>
+</div>
+</div>
+</section>
+<!-- 我的订单 -->
+<section class="tab-content" id="orders">
+<!-- 订单列表 -->
+<div id="ordersList">
+<div class="bg-white rounded-2xl shadow-lg p-8">
+<h2 class="text-2xl font-bold text-blue-800 mb-6">我的订单</h2>
+<div class="flex items-center justify-between mb-6">
+<div class="flex">
+<input class="bg-gray-50 border border-gray-300 rounded-l-lg px-4 py-2 w-64" placeholder="搜索订单号..." type="text"/>
+<button class="bg-blue-600 text-white px-6 py-2 rounded-r-lg">
+<span class="iconify align-middle" data-icon="mdi:magnify"></span>
+</button>
+</div>
+<div class="flex space-x-2">
+<select class="bg-gray-50 border border-gray-300 rounded-lg px-4 py-2">
+<option>全部状态</option>
+<option>待审核</option>
+<option>待客户确认</option>
+<option>已确认</option>
+<option>已完成</option>
+</select>
+<select class="bg-gray-50 border border-gray-300 rounded-lg px-4 py-2">
+<option>最近30天</option>
+<option>本月</option>
+<option>上个月</option>
+<option>2025年</option>
+</select>
+</div>
+</div>
+<div class="bg-gray-50 rounded-lg overflow-hidden">
+<div class="grid grid-cols-7 px-4 py-3 bg-gray-100 font-semibold text-gray-700">
+<div>订单号</div>
+<div>日期</div>
+<div>产品</div>
+<div>数量</div>
+<div>金额</div>
+<div>状态</div>
+<div>操作</div>
+</div>
+<!-- 订单行 -->
+<div class="grid grid-cols-7 px-4 py-3 border-b border-gray-200 hover:bg-gray-100">
+<div class="text-blue-600">ORD-20251118-001</div>
+<div>2025-11-18</div>
+<div>饮料包装盒</div>
+<div>100箱</div>
+<div>¥4,900.00</div>
+<div><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">待审核</span></div>
+<div>
+<button class="view-order-btn text-blue-600 hover:text-blue-500 flex items-center text-sm" data-order-id="ORD-20251118-001">
+<span class="iconify mr-1" data-icon="mdi:eye"></span>查看
+              </button>
+</div>
+</div>
+<!-- 更多订单行 -->
+<div class="grid grid-cols-7 px-4 py-3 border-b border-gray-200 hover:bg-gray-100">
+<div class="text-blue-600">ORD-20251115-045</div>
+<div>2025-11-15</div>
+<div>EPE泡沫卷</div>
+<div>50卷</div>
+<div>¥1,425.00</div>
+<div><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">已完成</span></div>
+<div>
+<button class="view-order-btn text-blue-600 hover:text-blue-500 flex items-center text-sm" data-order-id="ORD-20251115-045">
+<span class="iconify mr-1" data-icon="mdi:eye"></span>查看
+              </button>
+</div>
+</div>
+</div>
+<!-- 分页 -->
+<div class="mt-6 flex justify-between items-center">
+<div class="text-gray-600">显示 1-2 条，共 24 条</div>
+<div class="flex space-x-2">
+<button class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg">上一页</button>
+<button class="bg-blue-600 text-white px-4 py-2 rounded-lg">1</button>
+<button class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg">2</button>
+<button class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg">下一页</button>
+</div>
+</div>
+</div>
+</div>
+<!-- 订单详情 -->
+<div id="orderDetail" class="hidden">
+<div class="bg-white rounded-2xl shadow-lg p-8">
+<!-- 面包屑导航 -->
+<div class="mb-6">
+<nav class="flex items-center space-x-2 text-sm">
+<a href="#" id="breadcrumbOrders" class="text-blue-600 hover:text-blue-800">我的订单</a>
+<span class="text-gray-400">/</span>
+<span class="text-gray-600" id="breadcrumbCurrent">订单详情</span>
+</nav>
+</div>
+<div class="flex items-center mb-6">
+<button id="backToOrdersList" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg mr-4 flex items-center">
+<span class="iconify mr-2" data-icon="mdi:arrow-left"></span>返回订单列表
+</button>
+<h2 class="text-2xl font-bold text-blue-800">订单详情</h2>
+</div>
+<!-- 订单详情内容 -->
+<div id="orderDetailContent">
+<!-- 订单状态流程 -->
+<div class="mb-6 bg-gray-50 rounded-xl p-6">
+<h3 class="text-lg font-semibold text-gray-800 mb-4">订单状态流程</h3>
+<div class="flex items-center justify-between relative">
+<div class="flex flex-col items-center flex-1 relative">
+<div class="w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center font-bold mb-2 z-10">1</div>
+<div class="text-sm font-medium text-gray-800">已下单</div>
+<div class="text-xs text-gray-500 mt-1">2025-11-18 10:30</div>
+<div class="absolute top-6 left-1/2 w-full h-0.5 bg-green-500 z-0"></div>
+</div>
+<div class="flex flex-col items-center flex-1 relative">
+<div class="w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center font-bold mb-2 z-10">2</div>
+<div class="text-sm font-medium text-gray-800">待审核</div>
+<div class="text-xs text-gray-500 mt-1">当前状态</div>
+<div class="absolute top-6 left-1/2 w-full h-0.5 bg-gray-300 z-0"></div>
+</div>
+<div class="flex flex-col items-center flex-1 relative">
+<div class="w-12 h-12 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold mb-2 z-10">3</div>
+<div class="text-sm font-medium text-gray-600">待客户确认</div>
+<div class="absolute top-6 left-1/2 w-full h-0.5 bg-gray-300 z-0"></div>
+</div>
+<div class="flex flex-col items-center flex-1 relative">
+<div class="w-12 h-12 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold mb-2 z-10">4</div>
+<div class="text-sm font-medium text-gray-600">已确认</div>
+<div class="absolute top-6 left-1/2 w-full h-0.5 bg-gray-300 z-0"></div>
+</div>
+<div class="flex flex-col items-center flex-1">
+<div class="w-12 h-12 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold mb-2">5</div>
+<div class="text-sm font-medium text-gray-600">已完成</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-8 mb-6">
+<!-- 左侧：产品图片 -->
+<div>
+<div class="bg-gray-100 rounded-xl p-4 mb-4">
+<img alt="产品主图" class="w-full h-80 object-cover rounded-lg mb-3" id="orderMainImg" src="../customer_designs/OAT/FLOAT-1.jpg"/>
+<div class="flex space-x-2 overflow-x-auto">
+<img alt="细节图1" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg').src=this.src" src="../customer_designs/OAT/FLOAT-2.jpg"/>
+<img alt="细节图2" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg').src=this.src" src="../customer_designs/OAT/FLOAT-4.jpg"/>
+<img alt="细节图3" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg').src=this.src" src="../customer_designs/OAT/FLOAT-5.jpg"/>
+<img alt="细节图4" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg').src=this.src" src="../customer_designs/OAT/FLOAT-6.jpg"/>
+</div>
+</div>
+</div>
+<!-- 右侧：订单基本信息 -->
+<div>
+<div class="bg-gray-50 rounded-xl p-6 mb-4">
+<h4 class="font-semibold text-lg text-gray-800 mb-4">订单基本信息</h4>
+<div class="space-y-3">
+<div class="flex justify-between">
+<span class="text-gray-600">订单号:</span>
+<span class="font-medium" id="orderDetailNumber">ORD-20251118-001</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">下单时间:</span>
+<span class="font-medium">2025-11-18 10:30</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">订单状态:</span>
+<span><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">待审核</span></span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">产品名称:</span>
+<span class="font-medium">饮料包装设计 #DRK-2023</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">物料号:</span>
+<span class="font-medium">NP-20345-1</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">数量:</span>
+<span class="font-medium">100 箱</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">单价:</span>
+<span class="font-medium">¥45.80/箱</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">总金额:</span>
+<span class="font-medium text-green-600">¥4,900.00</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 产品规格和参数 -->
+<div class="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+<h4 class="font-semibold text-lg text-gray-800 mb-4">产品规格</h4>
+<div class="grid grid-cols-2 gap-4 mb-4">
+<div>
+<label class="block text-gray-600 mb-1">规格选择 (Format)</label>
+<div class="text-gray-800 font-medium">200S 160C*4.2U-Straw</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1">材料结构</label>
+<div class="text-gray-800 font-medium">PE-Al-Paper</div>
+</div>
+</div>
+<h4 class="font-semibold text-lg text-gray-800 mb-4 mt-6">产品参数</h4>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-gray-600 mb-1">灌装机型号</label>
+<div class="text-gray-800 font-medium">Tetra Pak A3</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1">填充物类型</label>
+<div class="text-gray-800 font-medium">UHT牛奶</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1">原纸要求</label>
+<div class="text-gray-800 font-medium">FSC认证原纸</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1">认证要求</label>
+<div class="flex space-x-2">
+<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">PEFC</span>
+<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">FSC</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 操作按钮区域 -->
+<div class="bg-blue-50 rounded-xl p-6 border border-blue-200">
+<h4 class="font-semibold text-lg text-blue-800 mb-4">订单操作</h4>
+<div class="grid grid-cols-3 gap-4">
+<button class="bg-green-600 hover:bg-green-500 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center">
+<span class="iconify mr-2" data-icon="mdi:cart-plus"></span>一键去复购
+</button>
+<button class="bg-blue-600 hover:bg-blue-500 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center">
+<span class="iconify mr-2" data-icon="mdi:truck"></span>查看订单物流信息
+</button>
+<button class="bg-yellow-600 hover:bg-yellow-500 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center">
+<span class="iconify mr-2" data-icon="mdi:file-edit"></span>发起修改申请
+</button>
+<button id="openComplaintBtn" class="bg-red-600 hover:bg-red-500 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center">
+<span class="iconify mr-2" data-icon="mdi:alert-circle"></span>发起客诉
+</button>
+<button class="bg-purple-600 hover:bg-purple-500 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center">
+<span class="iconify mr-2" data-icon="mdi:file-download"></span>导出订单信息
+</button>
+<button class="bg-indigo-600 hover:bg-indigo-500 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center">
+<span class="iconify mr-2" data-icon="mdi:receipt"></span>导出发票信息
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- 客诉页面 -->
+<div id="complaintPage" class="hidden">
+<div class="bg-white rounded-2xl shadow-lg p-8">
+<!-- 面包屑导航 -->
+<div class="mb-6">
+<nav class="flex items-center space-x-2 text-sm">
+<a href="#" id="breadcrumbOrders2" class="text-blue-600 hover:text-blue-800">我的订单</a>
+<span class="text-gray-400">/</span>
+<a href="#" id="breadcrumbOrderDetail" class="text-blue-600 hover:text-blue-800">订单详情</a>
+<span class="text-gray-400">/</span>
+<span class="text-gray-600">发起客诉</span>
+</nav>
+</div>
+<h2 class="text-2xl font-bold text-blue-800 mb-6">发起客诉</h2>
+<div class="max-w-3xl">
+<div class="bg-gray-50 rounded-xl p-6 mb-6">
+<h4 class="font-semibold text-lg text-gray-800 mb-4">订单信息</h4>
+<div class="grid grid-cols-2 gap-4 text-sm">
+<div>
+<span class="text-gray-600">订单号:</span>
+<span class="font-medium ml-2" id="complaintOrderNumber">ORD-20251118-001</span>
+</div>
+<div>
+<span class="text-gray-600">产品名称:</span>
+<span class="font-medium ml-2">饮料包装设计 #DRK-2023</span>
+</div>
+</div>
+</div>
+<div class="mb-6">
+<label class="block text-gray-700 mb-2 font-medium">客诉类型</label>
+<select class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3">
+<option>产品质量问题</option>
+<option>物流配送问题</option>
+<option>服务态度问题</option>
+<option>发票问题</option>
+<option>其他问题</option>
+</select>
+</div>
+<div class="mb-6">
+<label class="block text-gray-700 mb-2 font-medium">客诉内容</label>
+<textarea class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3" rows="8" placeholder="请详细描述您遇到的问题..."></textarea>
+</div>
+<div class="mb-6">
+<label class="block text-gray-700 mb-2 font-medium">上传凭证（可选）</label>
+<input type="file" class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-2" multiple accept="image/*"/>
+<p class="text-gray-500 text-sm mt-2">支持上传多张图片，格式：JPG、PNG，单张不超过5MB</p>
+</div>
+<div class="flex justify-end space-x-3">
+<button id="cancelComplaintBtn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded-lg">取消</button>
+<button class="bg-red-600 hover:bg-red-500 text-white px-6 py-2 rounded-lg">提交客诉</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 财务信息 -->
+<section class="tab-content" id="finance">
+<div class="bg-white rounded-2xl shadow-lg p-8">
+<h2 class="text-2xl font-bold text-blue-800 mb-6">财务信息</h2>
+<!-- 财务概览 -->
+<div class="grid grid-cols-4 gap-6 mb-8">
+<div class="bg-blue-50 rounded-xl p-6 border border-blue-200">
+<div class="text-gray-600 mb-1">已下单金额</div>
+<div class="text-xs text-gray-500 mb-2">本年度</div>
+<div class="text-2xl font-bold text-blue-700">¥86,520.00</div>
+</div>
+<div class="bg-green-50 rounded-xl p-6 border border-green-200">
+<div class="text-gray-600 mb-1">已返利金额</div>
+<div class="text-xs text-gray-500 mb-2">本年度</div>
+<div class="text-2xl font-bold text-green-700">¥3,450.00</div>
+</div>
+<div class="bg-yellow-50 rounded-xl p-6 border border-yellow-200">
+<div class="text-gray-600 mb-1">即将到期的付款</div>
+<div class="text-xs text-gray-500 mb-2">30天内到期</div>
+<div class="text-2xl font-bold text-yellow-700">¥12,500.00</div>
+</div>
+<div class="bg-red-50 rounded-xl p-6 border border-red-200">
+<div class="text-gray-600 mb-1">已经到期的付款</div>
+<div class="text-xs text-gray-500 mb-2">已逾期</div>
+<div class="text-2xl font-bold text-red-700">¥8,200.00</div>
+</div>
+</div>
+<!-- 财务明细 -->
+<div class="bg-gray-50 rounded-lg p-6">
+  <div class="flex items-center justify-between">
+    <h3 class="font-semibold text-lg text-gray-800 mb-0">财务明细</h3>
+    <button class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-lg">
+      导出报表
+    </button>
+  </div>
+<div class="overflow-x-auto">
+<table class="w-full">
+<thead>
+<tr class="bg-gray-100">
+<th class="px-4 py-2 text-left">发票编号</th>
+<th class="px-4 py-2 text-left">发票时间</th>
+<th class="px-4 py-2 text-right">发票金额</th>
+<th class="px-4 py-2 text-right">发票已付金额</th>
+<th class="px-4 py-2 text-right">发票未付金额 (Outstanding)</th>
+<th class="px-4 py-2 text-left">Due Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-gray-200">
+<td class="px-4 py-3 text-blue-600">INV-20251118-001</td>
+<td class="px-4 py-3">2025-11-18</td>
+<td class="px-4 py-3 text-right">¥4,900.00</td>
+<td class="px-4 py-3 text-right text-green-600">¥4,900.00</td>
+<td class="px-4 py-3 text-right">¥0.00</td>
+<td class="px-4 py-3">2025-12-18</td>
+</tr>
+<tr class="border-b border-gray-200">
+<td class="px-4 py-3 text-blue-600">INV-20251028-012</td>
+<td class="px-4 py-3">2025-10-28</td>
+<td class="px-4 py-3 text-right">¥12,500.00</td>
+<td class="px-4 py-3 text-right text-green-600">¥12,500.00</td>
+<td class="px-4 py-3 text-right">¥0.00</td>
+<td class="px-4 py-3">2025-11-28</td>
+</tr>
+<tr class="border-b border-gray-200">
+<td class="px-4 py-3 text-blue-600">INV-20251015-028</td>
+<td class="px-4 py-3">2025-10-15</td>
+<td class="px-4 py-3 text-right">¥8,200.00</td>
+<td class="px-4 py-3 text-right">¥0.00</td>
+<td class="px-4 py-3 text-right text-red-600">¥8,200.00</td>
+<td class="px-4 py-3 text-red-600">2025-11-05</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<!-- 画稿管理 -->
+<section class="tab-content" id="design-management">
+<div class="bg-white rounded-2xl shadow-lg p-8">
+<h2 class="text-2xl font-bold text-blue-800 mb-6">画稿管理</h2>
+<!-- 子模块导航 -->
+<div class="flex border-b border-gray-200 mb-6">
+<button class="submenu-tab-btn px-6 py-4 font-medium text-gray-600 hover:text-blue-700 border-b-2 border-blue-600 text-blue-700" data-section="upload-section">上传新画稿</button>
+<button class="submenu-tab-btn px-6 py-4 font-medium text-gray-600 hover:text-blue-700" data-section="browse-section">查看已有画稿</button>
+</div>
+<!-- 上传新画稿模块 -->
+<div class="submenu-section submenu-section-active" id="upload-section">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+<!-- 预览文件上传 -->
+<div class="preview-upload-container border-2 border-dashed border-gray-300 rounded-xl p-8 flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 transition cursor-pointer">
+<span class="iconify text-4xl text-blue-700 mb-4" data-icon="mdi:image"></span>
+<h3 class="text-lg font-medium mb-2">上传预览文件</h3>
+<p class="text-gray-600 text-center mb-4">支持 JPG/PNG/PDF 格式<br/>用于AI解析和预览</p>
+<input accept=".jpg,.jpeg,.png,.pdf" class="hidden" id="preview-file-input" type="file"/>
+<button class="bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded-lg transition">
+                  选择文件
+                </button>
+<div class="mt-4 w-full hidden" id="preview-container">
+<img class="w-full h-32 object-contain rounded-lg border border-gray-200" id="preview-image"/>
+<div class="mt-2 text-sm text-gray-600 flex items-center justify-between">
+<span id="preview-filename">filename.jpg</span>
+<span id="preview-size">2.5MB</span>
+</div>
+</div>
+</div>
+<!-- 原文件上传 -->
+<div class="original-upload-container border-2 border-dashed border-gray-300 rounded-xl p-8 flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 transition cursor-pointer">
+<span class="iconify text-4xl text-orange-500 mb-4" data-icon="mdi:file"></span>
+<h3 class="text-lg font-medium mb-2">上传原文件</h3>
+<p class="text-gray-600 text-center mb-4">原始设计文件 (最大600MB)<br/>用于后续制作处理</p>
+<input accept=".ai,.psd,.cdr" class="hidden" id="original-file-input" multiple="" type="file"/>
+<button class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg transition">
+                  选择文件
+                </button>
+<div class="mt-4 w-full hidden" id="original-info-container">
+<div class="space-y-2 mb-4" id="original-files-list"></div>
+<div class="text-xs text-gray-600">
+<div class="flex justify-between">
+<span>总文件数:</span>
+<span id="original-file-count">0</span>
+</div>
+<div class="flex justify-between">
+<span>总大小:</span>
+<span id="original-total-size">0 Bytes</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- AI解析结果 -->
+<div class="bg-white border border-gray-200 rounded-xl overflow-hidden mb-8">
+<div class="bg-blue-50 px-6 py-4 border-b border-gray-200 flex items-center">
+<span class="iconify text-blue-700 mr-2" data-icon="mdi:artificial-intelligence"></span>
+<h2 class="text-lg font-medium text-blue-700">AI解析结果</h2>
+<div class="ml-auto">
+<div class="flex items-center">
+<div class="h-2 w-2 rounded-full bg-green-500 mr-2"></div>
+<span class="text-sm text-green-700">分析完成</span>
+</div>
+</div>
+</div>
+<div class="p-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+<div>
+<label class="block text-gray-700 mb-2">填充物类型</label>
+<input class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-200" type="text" value="果汁"/>
+</div>
+<div>
+<label class="block text-gray-700 mb-2">容量</label>
+<input class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-200" type="text" value="200ml"/>
+</div>
+<div>
+<label class="block text-gray-700 mb-2">是否打孔</label>
+<select class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-200">
+<option>是</option>
+<option selected="">否</option>
+</select>
+</div>
+<div>
+<label class="block text-gray-700 mb-2">开启设备</label>
+<input class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-200" type="text" value="旋盖"/>
+</div>
+<div>
+<label class="block text-gray-700 mb-2">物理颜色目标</label>
+<input class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-200" type="text" value="深蓝色"/>
+</div>
+</div>
+<div class="border border-blue-100 bg-blue-50 rounded-lg p-4 mb-6">
+<div class="flex items-start">
+<span class="iconify text-blue-700 text-lg mt-1 mr-3" data-icon="mdi:lightbulb-on"></span>
+<div>
+<p class="text-blue-800 font-medium">AI分析判断：匹配到已有设计</p>
+<p class="text-blue-700 mt-1">检测到相似度92%的设计版本：100s型号-V7</p>
+<div class="mt-2 flex">
+<button class="text-blue-700 font-medium underline flex items-center">
+<span class="iconify mr-1" data-icon="mdi:link"></span>
+                          查看匹配设计
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<h3 class="font-medium">您是否认可AI的分析？</h3>
+<div class="flex space-x-4">
+<label class="flex items-center">
+<input class="text-blue-600 h-4 w-4" name="ai-accept" type="radio"/>
+<span class="ml-2">是新设计</span>
+</label>
+<label class="flex items-center">
+<input checked="" class="text-blue-600 h-4 w-4" name="ai-accept" type="radio"/>
+<span class="ml-2">是已有设计</span>
+</label>
+<label class="flex items-center">
+<input class="text-blue-600 h-4 w-4" name="ai-accept" type="radio"/>
+<span class="ml-2">不确认</span>
+</label>
+</div>
+<div class="mt-4">
+<label class="block text-gray-700 mb-2">附加说明</label>
+<textarea class="w-full border border-gray-300 rounded-lg px-4 py-2 h-24 focus:border-blue-500 focus:ring-1 focus:ring-blue-200" placeholder="如有不确认的情况，请在此处补充说明..."></textarea>
+</div>
+</div>
+<div class="mt-8">
+<h3 class="font-medium mb-4">联系人信息</h3>
+<div class="grid grid-cols-1 md:grid-rows-2 gap-6">
+<div>
+<label class="block text-gray-700 mb-2">联系邮箱</label>
+<div class="relative">
+<input class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-200" placeholder="请输入邮箱" type="email"/>
+<select class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 focus:outline-none">
+<option>历史邮箱</option>
+<option>admin@lemei.com</option>
+<option>design@lemei.com</option>
+<option>contact@lemei.com</option>
+</select>
+</div>
+</div>
+<div>
+<label class="block text-gray-700 mb-2">备用邮箱</label>
+<input class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-200" placeholder="选填备用邮箱" type="email"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex justify-end space-x-4">
+<button class="border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition">
+                取消
+              </button>
+<button class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg transition">
+<span class="iconify mr-2" data-icon="mdi:check"></span>
+                提交设计
+              </button>
+</div>
+</div>
+<!-- 查看已有画稿模块 -->
+<div class="submenu-section" id="browse-section">
+<h2 class="text-lg font-medium text-gray-800 mb-6">设计版本库</h2>
+<div class="space-y-4">
+<!-- 规格：果汁饮料 -->
+<div class="border border-gray-200 rounded-lg">
+<button class="spec-toggle w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center font-medium" data-spec="spec-1">
+<span class="iconify text-gray-600 mr-2 transition-transform" data-icon="mdi:chevron-right"></span>
+<span class="iconify text-orange-500 mr-2" data-icon="mdi:package"></span>
+<span>规格：果汁饮料 (200ml)</span>
+<span class="ml-auto text-sm text-gray-500">3个SKU</span>
+</button>
+<div class="spec-content hidden border-t border-gray-200 bg-gray-50" id="spec-1">
+<!-- SKU 1 -->
+<div class="border-b border-gray-200">
+<button class="sku-toggle w-full text-left px-8 py-3 hover:bg-gray-100 flex items-center font-medium text-sm" data-sku="sku-1-1">
+<span class="iconify text-gray-600 mr-2 transition-transform" data-icon="mdi:chevron-right"></span>
+<span class="iconify text-blue-500 mr-2" data-icon="mdi:barcode"></span>
+<span>SKU: JD-200-001 (无打孔版)</span>
+<span class="ml-auto text-xs text-gray-500">2个版本</span>
+</button>
+<div class="sku-content hidden bg-white border-t border-gray-200" id="sku-1-1">
+<div class="design-version-item px-12 py-4 border-b border-gray-200 hover:bg-blue-50 transition" data-sku="JD-200-001" data-version="v1">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center">
+<span class="iconify text-green-500 mr-2" data-icon="mdi:file-check"></span>
+<span class="text-sm font-medium">设计版本 V1 (当前版本)</span>
+</div>
+<span class="text-xs text-gray-500">2025-11-20</span>
+</div>
+<div class="design-preview-carousel flex items-center gap-3 overflow-x-auto pb-2 scroll-smooth" data-version-id="v1-jd200001">
+<div class="design-image flex-shrink-0 w-24 h-24 bg-gray-100 rounded border border-gray-300 cursor-pointer hover:border-blue-500 transition flex items-center justify-center" data-image="1">
+<span class="iconify text-3xl text-gray-400" data-icon="mdi:image"></span>
+</div>
+<div class="design-image flex-shrink-0 w-24 h-24 bg-gray-100 rounded border border-gray-300 cursor-pointer hover:border-blue-500 transition flex items-center justify-center" data-image="2">
+<span class="iconify text-3xl text-gray-400" data-icon="mdi:image"></span>
+</div>
+<div class="design-image flex-shrink-0 w-24 h-24 bg-gray-100 rounded border border-gray-300 cursor-pointer hover:border-blue-500 transition flex items-center justify-center" data-image="3">
+<span class="iconify text-3xl text-gray-400" data-icon="mdi:image"></span>
+</div>
+<div class="design-image flex-shrink-0 w-24 h-24 bg-gray-100 rounded border border-gray-300 cursor-pointer hover:border-blue-500 transition flex items-center justify-center" data-image="4">
+<span class="iconify text-3xl text-gray-400" data-icon="mdi:image"></span>
+</div>
+<div class="design-image flex-shrink-0 w-24 h-24 bg-gray-100 rounded border border-gray-300 cursor-pointer hover:border-blue-500 transition flex items-center justify-center" data-image="5">
+<span class="iconify text-3xl text-gray-400" data-icon="mdi:image"></span>
+</div>
+</div>
+</div>
+<div class="design-version-item px-12 py-4 hover:bg-blue-50 transition" data-sku="JD-200-001" data-version="v0">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center">
+<span class="iconify text-gray-400 mr-2" data-icon="mdi:file-document"></span>
+<span class="text-sm font-medium">设计版本 V0 (历史版本)</span>
+</div>
+<span class="text-xs text-gray-500">2025-11-15</span>
+</div>
+<div class="design-preview-carousel flex items-center gap-3 overflow-x-auto pb-2 scroll-smooth" data-version-id="v0-jd200001">
+<div class="design-image flex-shrink-0 w-24 h-24 bg-gray-100 rounded border border-gray-300 cursor-pointer hover:border-blue-500 transition flex items-center justify-center" data-image="1">
+<span class="iconify text-3xl text-gray-400" data-icon="mdi:image"></span>
+</div>
+<div class="design-image flex-shrink-0 w-24 h-24 bg-gray-100 rounded border border-gray-300 cursor-pointer hover:border-blue-500 transition flex items-center justify-center" data-image="2">
+<span class="iconify text-3xl text-gray-400" data-icon="mdi:image"></span>
+</div>
+<div class="design-image flex-shrink-0 w-24 h-24 bg-gray-100 rounded border border-gray-300 cursor-pointer hover:border-blue-500 transition flex items-center justify-center" data-image="3">
+<span class="iconify text-3xl text-gray-400" data-icon="mdi:image"></span>
+</div>
+<div class="design-image flex-shrink-0 w-24 h-24 bg-gray-100 rounded border border-gray-300 cursor-pointer hover:border-blue-500 transition flex items-center justify-center" data-image="4">
+<span class="iconify text-3xl text-gray-400" data-icon="mdi:image"></span>
+</div>
+<div class="design-image flex-shrink-0 w-24 h-24 bg-gray-100 rounded border border-gray-300 cursor-pointer hover:border-blue-500 transition flex items-center justify-center" data-image="5">
+<span class="iconify text-3xl text-gray-400" data-icon="mdi:image"></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 联系我们 -->
+<section class="tab-content" id="contact">
+<div class="bg-white rounded-2xl shadow-lg p-8">
+<h2 class="text-2xl font-bold text-blue-800 mb-6">联系我们</h2>
+<div class="grid grid-cols-2 gap-8">
+<div>
+<div class="mb-6">
+<h3 class="text-xl font-semibold text-gray-800 mb-4">公司信息</h3>
+<div class="space-y-3">
+<div class="flex items-start">
+<span class="iconify text-blue-600 mt-1 mr-3" data-icon="mdi:office-building"></span>
+<div>
+<div class="font-medium">乐美包装材料有限公司</div>
+<div class="text-gray-600">昆山市新南西路369号</div>
+</div>
+</div>
+<div class="flex items-center">
+<span class="iconify text-blue-600 mr-3" data-icon="mdi:phone"></span>
+<div class="text-gray-600">+86 21 8888 6666</div>
+</div>
+<div class="flex items-center">
+<span class="iconify text-blue-600 mr-3" data-icon="mdi:email"></span>
+<div class="text-gray-600">service@lemeipack.com</div>
+</div>
+<div class="flex items-center">
+<span class="iconify text-blue-600 mr-3" data-icon="mdi:clock"></span>
+<div class="text-gray-600">周一至周五 9:00-18:00 (GMT+8)</div>
+</div>
+</div>
+</div>
+<div>
+<h3 class="text-xl font-semibold text-gray-800 mb-4">社交媒体</h3>
+<div class="flex space-x-4">
+<button class="text-blue-500 hover:text-blue-700">
+<span class="iconify text-2xl" data-icon="mdi:wechat"></span>
+</button>
+<button class="text-blue-500 hover:text-blue-700">
+<span class="iconify text-2xl" data-icon="mdi:linkedin"></span>
+</button>
+<button class="text-blue-500 hover:text-blue-700">
+<span class="iconify text-2xl" data-icon="mdi:twitter"></span>
+</button>
+</div>
+</div>
+</div>
+<div>
+<h3 class="text-xl font-semibold text-gray-800 mb-4">在线留言</h3>
+<form class="space-y-4">
+<div>
+<label class="block text-gray-700 mb-2">您的姓名</label>
+<input class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3" type="text"/>
+</div>
+<div>
+<label class="block text-gray-700 mb-2">公司名称</label>
+<input class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3" type="text"/>
+</div>
+<div>
+<label class="block text-gray-700 mb-2">电子邮箱</label>
+<input class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3" type="email"/>
+</div>
+<div>
+<label class="block text-gray-700 mb-2">咨询类型</label>
+<select class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3">
+<option>产品咨询</option>
+<option>技术支持</option>
+<option>合作建议</option>
+<option>其他</option>
+</select>
+</div>
+<div>
+<label class="block text-gray-700 mb-2">消息内容</label>
+<textarea class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3" rows="4"></textarea>
+</div>
+<button class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold" type="submit">
+                提交留言
+              </button>
+</form>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>
+    // 存储选中的设计图片URL
+    let selectedDesignImage = null;
+    
+    // 产品数据（包含规格信息）
+    const productsData = [
+      {
+        id: 1,
+        name: "饮料包装设计 #DRK-2023",
+        description: "适用于果汁和碳酸饮料的防渗透包装",
+        image: "../customer_designs/Unikai/UNIKAI-1.jpg",
+        format: "200S",
+        machine: "Tetra Pak A3",
+        filling: "果汁",
+        material: "PE-Al-Paper",
+        productGroup: "10-无菌包",
+        series: "片材",
+        certifications: ["PEFC", "FSC"]
+      },
+      {
+        id: 2,
+        name: "乳品包装设计 #DARY-2024",
+        description: "长效保鲜的乳制品无菌包装方案",
+        image: "../customer_designs/Unikai/UNIKAI-4.jpg",
+        format: "LBA1000B",
+        machine: "SIG CFA122",
+        filling: "乳制品",
+        material: "PET-Paper",
+        productGroup: "10-无菌包",
+        series: "片材",
+        certifications: ["FSC"]
+      },
+      {
+        id: 3,
+        name: "定制礼盒 #GIFT-001",
+        description: "高端商务礼品包装解决方案",
+        image: "../customer_designs/Unikai/UNIKAI-9.jpg",
+        format: "1000B",
+        machine: "乐美 LP200",
+        filling: "汤类",
+        material: "Paper",
+        productGroup: "30-定制包",
+        series: "盖子",
+        certifications: ["PEFC"]
+      },
+      {
+        id: 4,
+        name: "牛奶包装设计 #MILK-2024",
+        description: "UHT牛奶专用包装设计",
+        image: "../customer_designs/RFG/RFG-1.jpg",
+        format: "200S",
+        machine: "Tetra Pak A3",
+        filling: "UHT牛奶",
+        material: "PE-Al-Paper",
+        productGroup: "10-无菌包",
+        series: "片材",
+        certifications: ["PEFC", "FSC"]
+      },
+      {
+        id: 5,
+        name: "豆奶包装设计 #SOY-2023",
+        description: "豆奶专用无菌包装",
+        image: "../customer_designs/RFG/RFG-2.jpg",
+        format: "LBA100B-H",
+        machine: "SIG CFA122",
+        filling: "豆奶",
+        material: "PET-Paper",
+        productGroup: "20-标准包",
+        series: "卷材",
+        certifications: []
+      },
+      {
+        id: 6,
+        name: "果汁包装设计 #JUICE-2024",
+        description: "新鲜果汁包装方案",
+        image: "../customer_designs/RFG/RFG-3.jpg",
+        format: "200S",
+        machine: "Tetra Pak A3",
+        filling: "果汁",
+        material: "PE-Al-Paper",
+        productGroup: "10-无菌包",
+        series: "片材",
+        certifications: ["FSC"]
+      }
+    ];
+    
+    // 筛选和显示产品
+    function filterAndDisplayProducts() {
+      const format = document.getElementById('filter-format')?.value || '';
+      const machine = document.getElementById('filter-machine')?.value || '';
+      const filling = document.getElementById('filter-filling')?.value || '';
+      const material = document.getElementById('filter-material')?.value || '';
+      const productGroup = document.getElementById('filter-product-group')?.value || '';
+      const series = document.getElementById('filter-series')?.value || '';
+      const pefc = document.getElementById('filter-pefc')?.checked || false;
+      const fsc = document.getElementById('filter-fsc')?.checked || false;
+      const search = document.getElementById('filter-search')?.value.toLowerCase() || '';
+      
+      // 筛选产品
+      let filteredProducts = productsData.filter(product => {
+        // 规格筛选
+        if (format && !product.format.includes(format)) return false;
+        // 灌装机型号筛选
+        if (machine && product.machine !== machine) return false;
+        // 填充物类型筛选
+        if (filling && product.filling !== filling) return false;
+        // 材料结构筛选
+        if (material && product.material !== material) return false;
+        // 产品组筛选
+        if (productGroup && product.productGroup !== productGroup) return false;
+        // 系列筛选
+        if (series && product.series !== series) return false;
+        // 认证要求筛选
+        if (pefc && !product.certifications.includes('PEFC')) return false;
+        if (fsc && !product.certifications.includes('FSC')) return false;
+        // 搜索筛选
+        if (search && !product.name.toLowerCase().includes(search) && 
+            !product.description.toLowerCase().includes(search)) return false;
+        return true;
+      });
+      
+      // 按规格分组
+      const groupedByFormat = {};
+      filteredProducts.forEach(product => {
+        if (!groupedByFormat[product.format]) {
+          groupedByFormat[product.format] = [];
+        }
+        groupedByFormat[product.format].push(product);
+      });
+      
+      // 渲染产品
+      const container = document.getElementById('products-container');
+      if (!container) return;
+      
+      if (Object.keys(groupedByFormat).length === 0) {
+        container.innerHTML = '<div class="text-center py-12 text-gray-500">没有找到符合条件的产品</div>';
+        return;
+      }
+      
+      let html = '';
+      Object.keys(groupedByFormat).sort().forEach(format => {
+        html += `
+          <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+            <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+              <span class="iconify text-blue-600 mr-2" data-icon="mdi:package-variant"></span>
+              规格: ${format}
+              <span class="ml-2 text-sm font-normal text-gray-500">(${groupedByFormat[format].length}个产品)</span>
+            </h4>
+            <div class="grid grid-cols-2 gap-4">
+        `;
+        
+        groupedByFormat[format].forEach(product => {
+          html += `
+            <div class="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition">
+              <img alt="${product.name}" class="w-full h-32 object-cover" src="${product.image}"/>
+              <div class="p-4">
+                <h5 class="font-semibold text-gray-800 mb-2">${product.name}</h5>
+                <p class="text-gray-600 text-sm mb-3">${product.description}</p>
+                <div class="text-xs text-gray-500 mb-3 space-y-1">
+                  <div>产品组: ${product.productGroup}</div>
+                  <div>系列: ${product.series}</div>
+                  <div>灌装机: ${product.machine}</div>
+                  <div>填充物: ${product.filling}</div>
+                  <div>材料: ${product.material}</div>
+                </div>
+                <button class="select-design-btn w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-lg transition" 
+                        data-image-src="${product.image}" 
+                        data-product-id="${product.id}">
+                  选择此设计
+                </button>
+              </div>
+            </div>
+          `;
+        });
+        
+        html += `
+            </div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+      
+      // 重新绑定选择设计按钮事件
+      document.querySelectorAll('.select-design-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          selectedDesignImage = button.dataset.imageSrc;
+          
+          // 移除其他按钮的选中状态
+          document.querySelectorAll('.select-design-btn').forEach(btn => {
+            btn.classList.remove('bg-green-600');
+            btn.classList.add('bg-blue-600');
+          });
+          
+          // 高亮当前选中的按钮
+          button.classList.remove('bg-blue-600');
+          button.classList.add('bg-green-600');
+        });
+      });
+    }
+    
+    // 初始化产品显示
+    filterAndDisplayProducts();
+    
+    // 绑定筛选事件
+    document.querySelectorAll('.filter-select, .filter-input, .filter-checkbox').forEach(element => {
+      element.addEventListener('change', filterAndDisplayProducts);
+      element.addEventListener('input', filterAndDisplayProducts);
+    });
+    
+    // 确认下单函数 - 跳转到我的订单页面
+    function confirmOrder() {
+      // 切换到"我的订单"标签页
+      const ordersTabBtn = document.querySelector('.tab-btn[data-tab="orders"]');
+      const ordersSection = document.getElementById('orders');
+      const ordersList = document.getElementById('ordersList');
+      const orderDetail = document.getElementById('orderDetail');
+      const complaintPage = document.getElementById('complaintPage');
+      
+      // 移除所有标签页按钮的激活状态
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('bg-blue-700'));
+      // 移除所有标签页内容的激活状态
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('tab-active'));
+      
+      // 激活"我的订单"标签页
+      ordersTabBtn.classList.add('bg-blue-700');
+      ordersSection.classList.add('tab-active');
+      
+      // 确保显示订单列表，隐藏订单详情和客诉页面
+      if (ordersList) ordersList.classList.remove('hidden');
+      if (orderDetail) orderDetail.classList.add('hidden');
+      if (complaintPage) complaintPage.classList.add('hidden');
+    }
+    
+    // 标签页切换功能
+    document.querySelectorAll('.tab-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        // 移除所有激活状态
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('bg-blue-700'));
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('tab-active'));
+        
+        // 添加当前激活状态
+        button.classList.add('bg-blue-700');
+        document.getElementById(button.dataset.tab).classList.add('tab-active');
+      });
+    });
+    
+    // 订单配置步骤切换
+    document.querySelectorAll('.step-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        // 移除所有激活状态
+        document.querySelectorAll('.step-btn').forEach(btn => btn.classList.remove('bg-blue-600', 'text-white'));
+        document.querySelectorAll('.step').forEach(step => step.classList.remove('step-active'));
+        
+        // 添加当前激活状态
+        button.classList.add('bg-blue-600', 'text-white');
+        document.getElementById(button.dataset.step).classList.add('step-active');
+      });
+    });
+    
+    // 步骤导航按钮
+    document.querySelectorAll('.next-step').forEach(button => {
+      button.addEventListener('click', () => {
+        if(button.dataset.target) {
+          const currentStep = button.closest('.step');
+          currentStep.classList.remove('step-active');
+          document.getElementById(button.dataset.target).classList.add('step-active');
+          
+          // 如果是从step1切换到step2，且已选择设计图片，则更新下单页面的图片
+          if(button.dataset.target === 'step2' && selectedDesignImage) {
+            const mainProductImg = document.getElementById('mainProductImg');
+            if(mainProductImg) {
+              mainProductImg.src = selectedDesignImage;
+            }
+          }
+          
+          // 更新步骤按钮状态
+          const stepBtn = document.querySelector(`.step-btn[data-step="${button.dataset.target}"]`);
+          document.querySelectorAll('.step-btn').forEach(btn => btn.classList.remove('bg-blue-600', 'text-white'));
+          stepBtn.classList.add('bg-blue-600', 'text-white');
+        }
+      });
+    });
+    
+    document.querySelectorAll('.prev-step').forEach(button => {
+      button.addEventListener('click', () => {
+        const currentStep = button.closest('.step');
+        currentStep.classList.remove('step-active');
+        document.getElementById(button.dataset.target).classList.add('step-active');
+        
+        // 更新步骤按钮状态
+        const stepBtn = document.querySelector(`.step-btn[data-step="${button.dataset.target}"]`);
+        document.querySelectorAll('.step-btn').forEach(btn => btn.classList.remove('bg-blue-600', 'text-white'));
+        stepBtn.classList.add('bg-blue-600', 'text-white');
+      });
+    });
+    
+    // 订单详情section控制
+    const ordersList = document.getElementById('ordersList');
+    const orderDetail = document.getElementById('orderDetail');
+    const orderDetailContent = document.getElementById('orderDetailContent');
+    const complaintPage = document.getElementById('complaintPage');
+    const backToOrdersList = document.getElementById('backToOrdersList');
+    const cancelComplaintBtn = document.getElementById('cancelComplaintBtn');
+    const breadcrumbOrders = document.getElementById('breadcrumbOrders');
+    const breadcrumbOrders2 = document.getElementById('breadcrumbOrders2');
+    const breadcrumbOrderDetail = document.getElementById('breadcrumbOrderDetail');
+    
+    // 打开订单详情
+    document.querySelectorAll('.view-order-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const orderId = button.dataset.orderId;
+        // 这里可以根据orderId加载不同的订单数据
+        document.getElementById('orderDetailNumber').textContent = orderId;
+        document.getElementById('complaintOrderNumber').textContent = orderId;
+        ordersList.classList.add('hidden');
+        orderDetail.classList.remove('hidden');
+        orderDetailContent.classList.remove('hidden');
+        complaintPage.classList.add('hidden');
+      });
+    });
+    
+    // 返回订单列表
+    if (backToOrdersList) {
+      backToOrdersList.addEventListener('click', () => {
+        orderDetail.classList.add('hidden');
+        orderDetailContent.classList.add('hidden');
+        complaintPage.classList.add('hidden');
+        ordersList.classList.remove('hidden');
+      });
+    }
+    
+    // 发起客诉按钮
+    const openComplaintBtn = document.getElementById('openComplaintBtn');
+    if (openComplaintBtn) {
+      openComplaintBtn.addEventListener('click', () => {
+        orderDetailContent.classList.add('hidden');
+        complaintPage.classList.remove('hidden');
+      });
+    }
+    
+    if (cancelComplaintBtn) {
+      cancelComplaintBtn.addEventListener('click', () => {
+        complaintPage.classList.add('hidden');
+        orderDetailContent.classList.remove('hidden');
+      });
+    }
+    
+    // 面包屑导航 - 返回订单列表
+    if (breadcrumbOrders) {
+      breadcrumbOrders.addEventListener('click', (e) => {
+        e.preventDefault();
+        orderDetail.classList.add('hidden');
+        orderDetailContent.classList.add('hidden');
+        complaintPage.classList.add('hidden');
+        ordersList.classList.remove('hidden');
+      });
+    }
+    
+    if (breadcrumbOrders2) {
+      breadcrumbOrders2.addEventListener('click', (e) => {
+        e.preventDefault();
+        orderDetail.classList.add('hidden');
+        orderDetailContent.classList.add('hidden');
+        complaintPage.classList.add('hidden');
+        ordersList.classList.remove('hidden');
+      });
+    }
+    
+    // 面包屑导航 - 返回订单详情
+    if (breadcrumbOrderDetail) {
+      breadcrumbOrderDetail.addEventListener('click', (e) => {
+        e.preventDefault();
+        complaintPage.classList.add('hidden');
+        orderDetailContent.classList.remove('hidden');
+      });
+    }
+    
+    // 画稿管理子模块切换
+    document.querySelectorAll('.submenu-tab-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const targetSection = button.dataset.section;
+        
+        // 移除所有激活状态
+        document.querySelectorAll('.submenu-tab-btn').forEach(btn => {
+          btn.classList.remove('border-b-2', 'border-blue-600', 'text-blue-700');
+        });
+        document.querySelectorAll('.submenu-section').forEach(section => {
+          section.classList.remove('submenu-section-active');
+        });
+        
+        // 添加当前激活状态
+        button.classList.add('border-b-2', 'border-blue-600', 'text-blue-700');
+        document.getElementById(targetSection).classList.add('submenu-section-active');
+      });
+    });
+    
+    // 规格展开/折叠
+    document.querySelectorAll('.spec-toggle').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const specId = this.getAttribute('data-spec');
+        const content = document.getElementById(specId);
+        const icon = this.querySelector('.iconify');
+        
+        if (content) {
+          content.classList.toggle('hidden');
+          if (icon) {
+            icon.style.transform = content.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(90deg)';
+          }
+        }
+      });
+    });
+
+    // SKU展开/折叠
+    document.querySelectorAll('.sku-toggle').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const skuId = this.getAttribute('data-sku');
+        const content = document.getElementById(skuId);
+        const icon = this.querySelector('.iconify');
+        
+        if (content) {
+          content.classList.toggle('hidden');
+          if (icon) {
+            icon.style.transform = content.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(90deg)';
+          }
+        }
+      });
+    });
+
+    // 文件上传功能
+    const previewUpload = document.querySelector('.preview-upload-container');
+    const previewInput = document.getElementById('preview-file-input');
+    const previewContainer = document.getElementById('preview-container');
+    const previewImage = document.getElementById('preview-image');
+    const previewFilename = document.getElementById('preview-filename');
+    const previewSize = document.getElementById('preview-size');
+
+    if (previewUpload && previewInput) {
+      previewUpload.addEventListener('click', () => {
+        previewInput.click();
+      });
+
+      previewInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            if (previewImage) previewImage.src = e.target.result;
+            if (previewFilename) previewFilename.textContent = file.name;
+            if (previewSize) previewSize.textContent = formatFileSize(file.size);
+            if (previewContainer) previewContainer.classList.remove('hidden');
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    // 原文件上传
+    const originalUpload = document.querySelector('.original-upload-container');
+    const originalInput = document.getElementById('original-file-input');
+    const originalInfoContainer = document.getElementById('original-info-container');
+    const originalFilesList = document.getElementById('original-files-list');
+    const originalFileCount = document.getElementById('original-file-count');
+    const originalTotalSize = document.getElementById('original-total-size');
+    
+    let uploadedFiles = [];
+
+    if (originalUpload && originalInput) {
+      originalUpload.addEventListener('click', () => {
+        originalInput.click();
+      });
+
+      originalInput.addEventListener('change', (e) => {
+        const newFiles = Array.from(e.target.files);
+        if (newFiles.length > 0) {
+          uploadedFiles = uploadedFiles.concat(newFiles);
+          updateFilesList();
+        }
+      });
+    }
+
+    function updateFilesList() {
+      if (!originalFilesList) return;
+      originalFilesList.innerHTML = '';
+      let totalSize = 0;
+      
+      uploadedFiles.forEach((file, index) => {
+        totalSize += file.size;
+        const fileItem = document.createElement('div');
+        fileItem.className = 'flex items-center justify-between p-3 bg-orange-50 rounded border border-orange-200';
+        fileItem.innerHTML = `
+          <div class="flex items-center flex-1">
+            <span class="iconify text-orange-500 mr-2" data-icon="mdi:file-document"></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-gray-800 truncate">${file.name}</p>
+              <p class="text-xs text-gray-600">${formatFileSize(file.size)}</p>
+            </div>
+          </div>
+          <button type="button" class="ml-2 text-orange-500 hover:text-orange-700 remove-file" data-index="${index}">
+            <span class="iconify" data-icon="mdi:close-circle"></span>
+          </button>
+        `;
+        originalFilesList.appendChild(fileItem);
+      });
+      
+      if (originalFileCount) originalFileCount.textContent = uploadedFiles.length;
+      if (originalTotalSize) originalTotalSize.textContent = formatFileSize(totalSize);
+      
+      if (originalInfoContainer && uploadedFiles.length > 0) {
+        originalInfoContainer.classList.remove('hidden');
+      }
+      
+      document.querySelectorAll('.remove-file').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const index = parseInt(btn.getAttribute('data-index'));
+          uploadedFiles.splice(index, 1);
+          updateFilesList();
+        });
+      });
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+  </script>
+</body>
+</html>
+
