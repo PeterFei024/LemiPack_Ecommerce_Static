@@ -38,11 +38,41 @@
 </nav>
 <div class="flex items-center space-x-3 flex-shrink-0">
 <div class="relative">
-<input class="bg-blue-700 rounded-full py-1.5 px-3 text-white placeholder-blue-200 w-48 text-sm" placeholder="搜索产品..." type="text"/>
-<span class="iconify absolute right-2 top-1.5 text-blue-200 text-sm" data-icon="mdi:magnify"></span>
+<input id="searchInput" class="bg-blue-700 rounded-full py-1.5 pl-3 pr-20 text-white placeholder-blue-200 w-64 text-sm" placeholder="搜索产品..." type="text"/>
+<span class="iconify absolute right-10 top-1.5 text-blue-200 text-sm pointer-events-none" data-icon="mdi:magnify"></span>
+<button id="imageSearchBtn" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-blue-200 hover:text-white transition cursor-pointer" title="图片搜索">
+<span class="iconify text-sm" data-icon="mdi:camera"></span>
+</button>
+<!-- 图片粘贴区域 -->
+<div id="imagePasteArea" class="hidden absolute top-full left-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 p-4 w-64 z-50">
+<div class="flex items-center justify-between mb-3">
+<h4 class="text-sm font-semibold text-gray-800">图片搜索</h4>
+<button id="closeImagePasteArea" class="text-gray-400 hover:text-gray-600">
+<span class="iconify text-sm" data-icon="mdi:close"></span>
+</button>
 </div>
-<button class="bg-green-600 hover:bg-green-500 text-white py-1.5 px-4 rounded-full flex items-center text-sm whitespace-nowrap">
+<div id="pasteImageContainer" class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:border-blue-500 transition min-h-32 flex flex-col items-center justify-center">
+<div id="pasteImagePlaceholder">
+<span class="iconify text-3xl text-gray-400 mb-2" data-icon="mdi:image-plus"></span>
+<p class="text-xs text-gray-500">粘贴图片或拖拽图片到这里</p>
+<p class="text-xs text-gray-400 mt-1">支持 JPG、PNG 格式</p>
+</div>
+<img id="pastedImagePreview" class="hidden max-w-full max-h-48 rounded" alt="粘贴的图片"/>
+</div>
+<div id="imageSearchActions" class="hidden mt-3 flex space-x-2">
+<button id="searchByImageBtn" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded-lg text-sm font-semibold flex items-center justify-center">
+<span class="iconify mr-2" data-icon="mdi:magnify"></span>
+搜索相似图片
+</button>
+<button id="clearImageBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg text-sm">
+清除
+</button>
+</div>
+</div>
+</div>
+<button id="cartBtn" class="bg-green-600 hover:bg-green-500 text-white py-1.5 px-4 rounded-full flex items-center text-sm whitespace-nowrap relative">
 <span class="iconify mr-1 text-sm" data-icon="mdi:cart"></span>购物车
+<span id="cartCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
         </button>
 <div class="relative">
 <select id="languageSelect" class="bg-blue-700 hover:bg-blue-600 text-white py-1.5 px-3 rounded-lg cursor-pointer appearance-none pr-6 border border-blue-600 text-sm">
@@ -281,19 +311,19 @@
 <div class="space-y-3">
 <div class="flex justify-between">
 <span class="text-gray-600">产品名称:</span>
-<span class="font-medium">饮料包装设计 #DRK-2023</span>
+<span class="font-medium" id="orderProductName">饮料包装设计 #DRK-2023</span>
 </div>
 <div class="flex justify-between">
 <span class="text-gray-600">物料号:</span>
-<span class="font-medium">NP-20345-1</span>
+<span class="font-medium" id="orderMaterialNumber">NP-20345-1</span>
 </div>
 <div class="flex justify-between">
 <span class="text-gray-600">规格:</span>
-<span class="font-medium">200S</span>
+<span class="font-medium" id="orderFormat">200S</span>
 </div>
 <div class="flex justify-between">
 <span class="text-gray-600">材料结构:</span>
-<span class="font-medium">PE-Al-Paper</span>
+<span class="font-medium" id="orderMaterial">PE-Al-Paper</span>
 </div>
 </div>
 </div>
@@ -303,9 +333,9 @@
 <div>
 <label class="block text-gray-700 mb-2">数量</label>
 <div class="flex items-center">
-<button class="bg-gray-200 px-4 py-2 rounded-l-lg">-</button>
-<input class="w-20 text-center border-y border-gray-200 py-2" type="number" value="100"/>
-<button class="bg-gray-200 px-4 py-2 rounded-r-lg">+</button>
+<button class="bg-gray-200 px-4 py-2 rounded-l-lg" onclick="decreaseQuantity()">-</button>
+<input id="orderQuantity" class="w-20 text-center border-y border-gray-200 py-2" type="number" value="100" min="1"/>
+<button class="bg-gray-200 px-4 py-2 rounded-r-lg" onclick="increaseQuantity()">+</button>
 <span class="ml-4 text-gray-600">(单位: 箱)</span>
 </div>
 </div>
@@ -325,9 +355,15 @@
 <button class="prev-step bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-3 rounded-lg font-semibold" data-target="step1">
               上一步
             </button>
+<div class="flex space-x-3">
+<button class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold flex items-center" onclick="addToCart()">
+              <span class="iconify mr-2" data-icon="mdi:cart"></span>
+              加入购物车
+            </button>
 <button class="bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-lg font-semibold" onclick="confirmOrder()">
               确认下单
             </button>
+</div>
 </div>
 </div>
 </div>
@@ -463,102 +499,12 @@
 </div>
 </div>
 </div>
-<div class="grid grid-cols-2 gap-8 mb-6">
-<!-- 左侧：产品图片 -->
-<div>
-<div class="bg-gray-100 rounded-xl p-4 mb-4">
-<img alt="产品主图" class="w-full h-80 object-cover rounded-lg mb-3" id="orderMainImg" src="../customer_designs/OAT/FLOAT-1.jpg"/>
-<div class="flex space-x-2 overflow-x-auto">
-<img alt="细节图1" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg').src=this.src" src="../customer_designs/OAT/FLOAT-2.jpg"/>
-<img alt="细节图2" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg').src=this.src" src="../customer_designs/OAT/FLOAT-4.jpg"/>
-<img alt="细节图3" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg').src=this.src" src="../customer_designs/OAT/FLOAT-5.jpg"/>
-<img alt="细节图4" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg').src=this.src" src="../customer_designs/OAT/FLOAT-6.jpg"/>
-</div>
-</div>
-</div>
-<!-- 右侧：订单基本信息 -->
-<div>
-<div class="bg-gray-50 rounded-xl p-6 mb-4">
-<h4 class="font-semibold text-lg text-gray-800 mb-4">订单基本信息</h4>
-<div class="space-y-3">
-<div class="flex justify-between">
-<span class="text-gray-600">订单号:</span>
-<span class="font-medium" id="orderDetailNumber">ORD-20251118-001</span>
-</div>
-<div class="flex justify-between">
-<span class="text-gray-600">下单时间:</span>
-<span class="font-medium">2025-11-18 10:30</span>
-</div>
-<div class="flex justify-between">
-<span class="text-gray-600">订单状态:</span>
-<span><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">待审核</span></span>
-</div>
-<div class="flex justify-between">
-<span class="text-gray-600">产品名称:</span>
-<span class="font-medium">饮料包装设计 #DRK-2023</span>
-</div>
-<div class="flex justify-between">
-<span class="text-gray-600">物料号:</span>
-<span class="font-medium">NP-20345-1</span>
-</div>
-<div class="flex justify-between">
-<span class="text-gray-600">数量:</span>
-<span class="font-medium">100 箱</span>
-</div>
-<div class="flex justify-between">
-<span class="text-gray-600">单价:</span>
-<span class="font-medium">¥45.80/箱</span>
-</div>
-<div class="flex justify-between">
-<span class="text-gray-600">总金额:</span>
-<span class="font-medium text-green-600">¥4,900.00</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- 产品规格和参数 -->
-<div class="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-<h4 class="font-semibold text-lg text-gray-800 mb-4">产品规格</h4>
-<div class="grid grid-cols-2 gap-4 mb-4">
-<div>
-<label class="block text-gray-600 mb-1">规格选择 (Format)</label>
-<div class="text-gray-800 font-medium">200S 160C*4.2U-Straw</div>
-</div>
-<div>
-<label class="block text-gray-600 mb-1">材料结构</label>
-<div class="text-gray-800 font-medium">PE-Al-Paper</div>
-</div>
-</div>
-<h4 class="font-semibold text-lg text-gray-800 mb-4 mt-6">产品参数</h4>
-<div class="grid grid-cols-2 gap-4">
-<div>
-<label class="block text-gray-600 mb-1">灌装机型号</label>
-<div class="text-gray-800 font-medium">Tetra Pak A3</div>
-</div>
-<div>
-<label class="block text-gray-600 mb-1">填充物类型</label>
-<div class="text-gray-800 font-medium">UHT牛奶</div>
-</div>
-<div>
-<label class="block text-gray-600 mb-1">原纸要求</label>
-<div class="text-gray-800 font-medium">FSC认证原纸</div>
-</div>
-<div>
-<label class="block text-gray-600 mb-1">认证要求</label>
-<div class="flex space-x-2">
-<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">PEFC</span>
-<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">FSC</span>
-</div>
-</div>
-</div>
-</div>
 <!-- 操作按钮区域 -->
-<div class="bg-blue-50 rounded-xl p-6 border border-blue-200">
+<div class="bg-blue-50 rounded-xl p-6 border border-blue-200 mb-6">
 <h4 class="font-semibold text-lg text-blue-800 mb-4">订单操作</h4>
 <div class="grid grid-cols-3 gap-4">
 <button class="bg-green-600 hover:bg-green-500 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center">
-<span class="iconify mr-2" data-icon="mdi:cart-plus"></span>一键去复购
+<span class="iconify mr-2" data-icon="mdi:cart-plus"></span>一键复购
 </button>
 <button class="bg-blue-600 hover:bg-blue-500 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center">
 <span class="iconify mr-2" data-icon="mdi:truck"></span>查看订单物流信息
@@ -575,6 +521,266 @@
 <button class="bg-indigo-600 hover:bg-indigo-500 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center">
 <span class="iconify mr-2" data-icon="mdi:receipt"></span>导出发票信息
 </button>
+</div>
+</div>
+<!-- 订单基本信息 -->
+<div class="bg-gray-50 rounded-xl p-6 mb-6">
+<h4 class="font-semibold text-lg text-gray-800 mb-4">订单基本信息</h4>
+<div class="grid grid-cols-4 gap-4">
+<div>
+<label class="block text-gray-600 mb-1 text-sm">订单号</label>
+<div class="text-gray-800 font-medium" id="orderDetailNumber">ORD-20251118-001</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-sm">下单时间</label>
+<div class="text-gray-800 font-medium">2025-11-18 10:30</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-sm">订单状态</label>
+<div><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">待审核</span></div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-sm">订单总金额</label>
+<div class="text-gray-800 font-medium text-green-600 text-lg">¥14,700.00</div>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-gray-200">
+<div class="grid grid-cols-4 gap-4">
+<div>
+<label class="block text-gray-600 mb-1 text-sm">SKU总数</label>
+<div class="text-gray-800 font-medium">3</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-sm">总数量</label>
+<div class="text-gray-800 font-medium">300 箱</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-sm">平均单价</label>
+<div class="text-gray-800 font-medium">¥49.00/箱</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-sm">期望送达日期</label>
+<div class="text-gray-800 font-medium">2025-12-18</div>
+</div>
+</div>
+</div>
+</div>
+<!-- SKU列表 -->
+<div class="space-y-6 mb-6">
+<!-- SKU 1 -->
+<div class="bg-white rounded-xl border border-gray-200 p-6">
+<div class="grid grid-cols-2 gap-8">
+<!-- 左侧：产品图片 -->
+<div>
+<div class="bg-gray-100 rounded-xl p-4">
+<img alt="产品主图" class="w-full h-80 object-cover rounded-lg mb-3" id="orderMainImg1" src="../customer_designs/OAT/FLOAT-1.jpg"/>
+<div class="flex space-x-2 overflow-x-auto">
+<img alt="细节图1" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg1').src=this.src" src="../customer_designs/OAT/FLOAT-2.jpg"/>
+<img alt="细节图2" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg1').src=this.src" src="../customer_designs/OAT/FLOAT-4.jpg"/>
+<img alt="细节图3" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg1').src=this.src" src="../customer_designs/OAT/FLOAT-5.jpg"/>
+<img alt="细节图4" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg1').src=this.src" src="../customer_designs/OAT/FLOAT-6.jpg"/>
+</div>
+</div>
+</div>
+<!-- 右侧：产品规格信息 -->
+<div>
+<div class="mb-4">
+<h5 class="font-semibold text-lg text-gray-800 mb-2">SKU #1: 饮料包装设计 #DRK-2023</h5>
+<div class="text-sm text-gray-600 mb-4">物料号: NP-20345-1</div>
+</div>
+<div class="bg-gray-50 rounded-lg p-4 mb-4">
+<h6 class="font-semibold text-gray-800 mb-3">产品规格</h6>
+<div class="grid grid-cols-2 gap-3 mb-3">
+<div>
+<label class="block text-gray-600 mb-1 text-xs">规格选择 (Format)</label>
+<div class="text-gray-800 font-medium text-sm">200S 160C*4.2U-Straw</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-xs">材料结构</label>
+<div class="text-gray-800 font-medium text-sm">PE-Al-Paper</div>
+</div>
+</div>
+<h6 class="font-semibold text-gray-800 mb-3 mt-4">产品参数</h6>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block text-gray-600 mb-1 text-xs">灌装机型号</label>
+<div class="text-gray-800 font-medium text-sm">Tetra Pak A3</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-xs">填充物类型</label>
+<div class="text-gray-800 font-medium text-sm">UHT牛奶</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-xs">原纸要求</label>
+<div class="text-gray-800 font-medium text-sm">FSC认证原纸</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-xs">认证要求</label>
+<div class="flex space-x-2">
+<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">PEFC</span>
+<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">FSC</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-blue-50 rounded-lg p-4">
+<div class="flex justify-between items-center mb-2">
+<span class="text-gray-600 text-sm">数量:</span>
+<span class="font-medium">100 箱</span>
+</div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-gray-600 text-sm">单价:</span>
+<span class="font-medium">¥45.80/箱</span>
+</div>
+<div class="flex justify-between items-center pt-2 border-t border-blue-200">
+<span class="text-gray-600 font-semibold">小计:</span>
+<span class="font-bold text-green-600">¥4,900.00</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- SKU 2 -->
+<div class="bg-white rounded-xl border border-gray-200 p-6">
+<div class="grid grid-cols-2 gap-8">
+<!-- 左侧：产品图片 -->
+<div>
+<div class="bg-gray-100 rounded-xl p-4">
+<img alt="产品主图" class="w-full h-80 object-cover rounded-lg mb-3" id="orderMainImg2" src="../customer_designs/Unikai/UNIKAI-4.jpg"/>
+<div class="flex space-x-2 overflow-x-auto">
+<img alt="细节图1" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg2').src=this.src" src="../customer_designs/Unikai/UNIKAI-1.jpg"/>
+<img alt="细节图2" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg2').src=this.src" src="../customer_designs/Unikai/UNIKAI-9.jpg"/>
+</div>
+</div>
+</div>
+<!-- 右侧：产品规格信息 -->
+<div>
+<div class="mb-4">
+<h5 class="font-semibold text-lg text-gray-800 mb-2">SKU #2: 乳品包装设计 #DARY-2024</h5>
+<div class="text-sm text-gray-600 mb-4">物料号: NP-20345-2</div>
+</div>
+<div class="bg-gray-50 rounded-lg p-4 mb-4">
+<h6 class="font-semibold text-gray-800 mb-3">产品规格</h6>
+<div class="grid grid-cols-2 gap-3 mb-3">
+<div>
+<label class="block text-gray-600 mb-1 text-xs">规格选择 (Format)</label>
+<div class="text-gray-800 font-medium text-sm">LBA1000B</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-xs">材料结构</label>
+<div class="text-gray-800 font-medium text-sm">PET-Paper</div>
+</div>
+</div>
+<h6 class="font-semibold text-gray-800 mb-3 mt-4">产品参数</h6>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block text-gray-600 mb-1 text-xs">灌装机型号</label>
+<div class="text-gray-800 font-medium text-sm">SIG CFA122</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-xs">填充物类型</label>
+<div class="text-gray-800 font-medium text-sm">乳制品</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-xs">原纸要求</label>
+<div class="text-gray-800 font-medium text-sm">标准原纸</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-xs">认证要求</label>
+<div class="flex space-x-2">
+<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">FSC</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-blue-50 rounded-lg p-4">
+<div class="flex justify-between items-center mb-2">
+<span class="text-gray-600 text-sm">数量:</span>
+<span class="font-medium">100 箱</span>
+</div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-gray-600 text-sm">单价:</span>
+<span class="font-medium">¥48.00/箱</span>
+</div>
+<div class="flex justify-between items-center pt-2 border-t border-blue-200">
+<span class="text-gray-600 font-semibold">小计:</span>
+<span class="font-bold text-green-600">¥4,800.00</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- SKU 3 -->
+<div class="bg-white rounded-xl border border-gray-200 p-6">
+<div class="grid grid-cols-2 gap-8">
+<!-- 左侧：产品图片 -->
+<div>
+<div class="bg-gray-100 rounded-xl p-4">
+<img alt="产品主图" class="w-full h-80 object-cover rounded-lg mb-3" id="orderMainImg3" src="../customer_designs/RFG/RFG-1.jpg"/>
+<div class="flex space-x-2 overflow-x-auto">
+<img alt="细节图1" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg3').src=this.src" src="../customer_designs/RFG/RFG-2.jpg"/>
+<img alt="细节图2" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg3').src=this.src" src="../customer_designs/RFG/RFG-3.jpg"/>
+<img alt="细节图3" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg3').src=this.src" src="../customer_designs/RFG/RFG-4.jpg"/>
+</div>
+</div>
+</div>
+<!-- 右侧：产品规格信息 -->
+<div>
+<div class="mb-4">
+<h5 class="font-semibold text-lg text-gray-800 mb-2">SKU #3: 牛奶包装设计 #MILK-2024</h5>
+<div class="text-sm text-gray-600 mb-4">物料号: NP-20345-3</div>
+</div>
+<div class="bg-gray-50 rounded-lg p-4 mb-4">
+<h6 class="font-semibold text-gray-800 mb-3">产品规格</h6>
+<div class="grid grid-cols-2 gap-3 mb-3">
+<div>
+<label class="block text-gray-600 mb-1 text-xs">规格选择 (Format)</label>
+<div class="text-gray-800 font-medium text-sm">200S</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-xs">材料结构</label>
+<div class="text-gray-800 font-medium text-sm">PE-Al-Paper</div>
+</div>
+</div>
+<h6 class="font-semibold text-gray-800 mb-3 mt-4">产品参数</h6>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block text-gray-600 mb-1 text-xs">灌装机型号</label>
+<div class="text-gray-800 font-medium text-sm">Tetra Pak A3</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-xs">填充物类型</label>
+<div class="text-gray-800 font-medium text-sm">UHT牛奶</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-xs">原纸要求</label>
+<div class="text-gray-800 font-medium text-sm">FSC认证原纸</div>
+</div>
+<div>
+<label class="block text-gray-600 mb-1 text-xs">认证要求</label>
+<div class="flex space-x-2">
+<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">PEFC</span>
+<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">FSC</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-blue-50 rounded-lg p-4">
+<div class="flex justify-between items-center mb-2">
+<span class="text-gray-600 text-sm">数量:</span>
+<span class="font-medium">100 箱</span>
+</div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-gray-600 text-sm">单价:</span>
+<span class="font-medium">¥50.00/箱</span>
+</div>
+<div class="flex justify-between items-center pt-2 border-t border-blue-200">
+<span class="text-gray-600 font-semibold">小计:</span>
+<span class="font-bold text-green-600">¥5,000.00</span>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1034,10 +1240,171 @@
 </div>
 </div>
 </section>
+<!-- 购物车 -->
+<section class="tab-content" id="cart">
+<div class="bg-white rounded-2xl shadow-lg p-8">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-2xl font-bold text-blue-800">购物车</h2>
+<div class="flex items-center space-x-4">
+<div class="text-gray-600">
+共 <span id="cartTotalItems" class="font-semibold text-blue-600">0</span> 件商品
+</div>
+<div class="text-lg font-bold text-green-600">
+总计: ¥<span id="cartTotalPrice">0.00</span>
+</div>
+</div>
+</div>
+<div id="cartContainer" class="space-y-6">
+<!-- 购物车商品将按规格分类显示在这里 -->
+<div class="text-center py-12 text-gray-500">
+购物车是空的，快去添加商品吧！
+</div>
+</div>
+<div id="cartActions" class="hidden mt-8 flex justify-end space-x-4">
+<button class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-3 rounded-lg font-semibold">
+清空购物车
+</button>
+<button class="bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded-lg font-semibold">
+去结算
+</button>
+</div>
+</div>
+</section>
 </main>
 <script>
     // 存储选中的设计图片URL
     let selectedDesignImage = null;
+    
+    // 图片搜索功能
+    (function() {
+      const imageSearchBtn = document.getElementById('imageSearchBtn');
+      const imagePasteArea = document.getElementById('imagePasteArea');
+      const closeImagePasteArea = document.getElementById('closeImagePasteArea');
+      const pasteImageContainer = document.getElementById('pasteImageContainer');
+      const pasteImagePlaceholder = document.getElementById('pasteImagePlaceholder');
+      const pastedImagePreview = document.getElementById('pastedImagePreview');
+      const imageSearchActions = document.getElementById('imageSearchActions');
+      const searchByImageBtn = document.getElementById('searchByImageBtn');
+      const clearImageBtn = document.getElementById('clearImageBtn');
+      let pastedImageFile = null;
+      
+      // 点击相机图标显示/隐藏图片粘贴区域
+      if (imageSearchBtn && imagePasteArea) {
+        imageSearchBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          imagePasteArea.classList.toggle('hidden');
+        });
+        
+        // 点击关闭按钮
+        if (closeImagePasteArea) {
+          closeImagePasteArea.addEventListener('click', () => {
+            imagePasteArea.classList.add('hidden');
+          });
+        }
+        
+        // 点击外部区域关闭
+        document.addEventListener('click', (e) => {
+          if (!imagePasteArea.contains(e.target) && !imageSearchBtn.contains(e.target)) {
+            imagePasteArea.classList.add('hidden');
+          }
+        });
+      }
+      
+      // 粘贴图片功能
+      if (pasteImageContainer) {
+        // 监听粘贴事件
+        document.addEventListener('paste', (e) => {
+          if (!imagePasteArea.classList.contains('hidden')) {
+            const items = e.clipboardData.items;
+            for (let i = 0; i < items.length; i++) {
+              if (items[i].type.indexOf('image') !== -1) {
+                const blob = items[i].getAsFile();
+                handleImageFile(blob);
+                e.preventDefault();
+                break;
+              }
+            }
+          }
+        });
+        
+        // 拖拽图片功能
+        pasteImageContainer.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          pasteImageContainer.classList.add('border-blue-500', 'bg-blue-50');
+        });
+        
+        pasteImageContainer.addEventListener('dragleave', (e) => {
+          e.preventDefault();
+          pasteImageContainer.classList.remove('border-blue-500', 'bg-blue-50');
+        });
+        
+        pasteImageContainer.addEventListener('drop', (e) => {
+          e.preventDefault();
+          pasteImageContainer.classList.remove('border-blue-500', 'bg-blue-50');
+          
+          const files = e.dataTransfer.files;
+          if (files.length > 0 && files[0].type.startsWith('image/')) {
+            handleImageFile(files[0]);
+          }
+        });
+        
+        // 点击区域选择文件
+        pasteImageContainer.addEventListener('click', () => {
+          const input = document.createElement('input');
+          input.type = 'file';
+          input.accept = 'image/*';
+          input.onchange = (e) => {
+            if (e.target.files.length > 0) {
+              handleImageFile(e.target.files[0]);
+            }
+          };
+          input.click();
+        });
+      }
+      
+      // 处理图片文件
+      function handleImageFile(file) {
+        if (!file.type.startsWith('image/')) {
+          alert('请选择图片文件');
+          return;
+        }
+        
+        pastedImageFile = file;
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          pastedImagePreview.src = e.target.result;
+          pastedImagePreview.classList.remove('hidden');
+          pasteImagePlaceholder.classList.add('hidden');
+          imageSearchActions.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+      
+      // 搜索相似图片
+      if (searchByImageBtn) {
+        searchByImageBtn.addEventListener('click', () => {
+          if (pastedImageFile) {
+            // 这里可以调用后台API进行图片搜索
+            // 例如：uploadImageAndSearch(pastedImageFile);
+            console.log('搜索相似图片', pastedImageFile);
+            alert('正在搜索相似图片...（这里会调用后台API）');
+            // 实际实现时，可以发送图片到后台，然后显示搜索结果
+          }
+        });
+      }
+      
+      // 清除图片
+      if (clearImageBtn) {
+        clearImageBtn.addEventListener('click', () => {
+          pastedImageFile = null;
+          pastedImagePreview.src = '';
+          pastedImagePreview.classList.add('hidden');
+          pasteImagePlaceholder.classList.remove('hidden');
+          imageSearchActions.classList.add('hidden');
+        });
+      }
+    })();
     
     // 产品数据（包含规格信息）
     const productsData = [
@@ -1267,6 +1634,273 @@
       if (ordersList) ordersList.classList.remove('hidden');
       if (orderDetail) orderDetail.classList.add('hidden');
       if (complaintPage) complaintPage.classList.add('hidden');
+    }
+    
+    // 购物车数据结构
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    // 更新购物车数量显示
+    function updateCartCount() {
+      const cartCount = document.getElementById('cartCount');
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      if (cartCount) {
+        if (totalItems > 0) {
+          cartCount.textContent = totalItems;
+          cartCount.classList.remove('hidden');
+        } else {
+          cartCount.classList.add('hidden');
+        }
+      }
+    }
+    
+    // 保存购物车到本地存储
+    function saveCart() {
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartCount();
+      renderCart();
+    }
+    
+    // 添加商品到购物车
+    function addToCart(productData) {
+      // 如果没有传入productData，尝试从当前页面获取
+      if (!productData) {
+        // 从下单页面获取商品信息
+        const productNameEl = document.getElementById('orderProductName');
+        const materialNumberEl = document.getElementById('orderMaterialNumber');
+        const formatEl = document.getElementById('orderFormat');
+        const materialEl = document.getElementById('orderMaterial');
+        const quantityEl = document.getElementById('orderQuantity');
+        
+        if (!productNameEl) {
+          alert('请先选择商品设计');
+          return;
+        }
+        
+        const productName = productNameEl.textContent || '未命名商品';
+        const materialNumber = materialNumberEl?.textContent || '';
+        const format = formatEl?.textContent || '未分类';
+        const material = materialEl?.textContent || '';
+        const quantity = parseInt(quantityEl?.value) || 1;
+        const price = 49.00; // 默认价格，实际应该从页面获取
+        
+        productData = {
+          id: Date.now(),
+          name: productName,
+          materialNumber: materialNumber,
+          image: selectedDesignImage || document.getElementById('mainProductImg')?.src || '../customer_designs/RFG/RFG-1.jpg',
+          format: format,
+          quantity: quantity,
+          price: price,
+          material: material,
+          machine: 'Tetra Pak A3',
+          filling: 'UHT牛奶'
+        };
+      }
+      
+      // 检查购物车中是否已有相同商品
+      const existingItem = cart.find(item => 
+        item.id === productData.id && 
+        item.format === productData.format
+      );
+      
+      if (existingItem) {
+        existingItem.quantity += productData.quantity || 1;
+      } else {
+        cart.push({
+          ...productData,
+          quantity: productData.quantity || 1
+        });
+      }
+      
+      saveCart();
+      alert('商品已成功加入购物车！');
+    }
+    
+    // 从购物车移除商品
+    function removeFromCart(itemId) {
+      cart = cart.filter(item => item.id !== itemId);
+      saveCart();
+    }
+    
+    // 更新购物车商品数量
+    function updateCartItemQuantity(itemId, quantity) {
+      const item = cart.find(item => item.id === itemId);
+      if (item) {
+        if (quantity <= 0) {
+          removeFromCart(itemId);
+        } else {
+          item.quantity = quantity;
+          saveCart();
+        }
+      }
+    }
+    
+    // 渲染购物车
+    function renderCart() {
+      const cartContainer = document.getElementById('cartContainer');
+      const cartActions = document.getElementById('cartActions');
+      const cartTotalItems = document.getElementById('cartTotalItems');
+      const cartTotalPrice = document.getElementById('cartTotalPrice');
+      
+      if (!cartContainer) return;
+      
+      if (cart.length === 0) {
+        cartContainer.innerHTML = '<div class="text-center py-12 text-gray-500">购物车是空的，快去添加商品吧！</div>';
+        if (cartActions) cartActions.classList.add('hidden');
+        if (cartTotalItems) cartTotalItems.textContent = '0';
+        if (cartTotalPrice) cartTotalPrice.textContent = '0.00';
+        return;
+      }
+      
+      // 按规格分组
+      const groupedByFormat = {};
+      cart.forEach(item => {
+        const format = item.format || '未分类';
+        if (!groupedByFormat[format]) {
+          groupedByFormat[format] = [];
+        }
+        groupedByFormat[format].push(item);
+      });
+      
+      // 计算总金额
+      const totalPrice = cart.reduce((sum, item) => sum + (item.price || 0) * item.quantity, 0);
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      
+      if (cartTotalItems) cartTotalItems.textContent = totalItems;
+      if (cartTotalPrice) cartTotalPrice.textContent = totalPrice.toFixed(2);
+      if (cartActions) cartActions.classList.remove('hidden');
+      
+      // 渲染商品列表
+      let html = '';
+      Object.keys(groupedByFormat).sort().forEach(format => {
+        html += `
+          <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+            <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+              <span class="iconify text-blue-600 mr-2" data-icon="mdi:package-variant"></span>
+              规格: ${format}
+              <span class="ml-2 text-sm font-normal text-gray-500">(${groupedByFormat[format].length}个商品)</span>
+            </h4>
+            <div class="space-y-4">
+        `;
+        
+        groupedByFormat[format].forEach(item => {
+          const itemTotal = (item.price || 0) * item.quantity;
+          html += `
+            <div class="bg-gray-50 rounded-lg border border-gray-200 p-4 flex items-center gap-4">
+              <img src="${item.image || '../customer_designs/RFG/RFG-1.jpg'}" alt="${item.name}" class="w-24 h-24 object-cover rounded-lg flex-shrink-0"/>
+              <div class="flex-1">
+                <h5 class="font-semibold text-gray-800 mb-1">${item.name}</h5>
+                <div class="text-xs text-gray-500 space-y-1">
+                  ${item.material ? `<div>材料: ${item.material}</div>` : ''}
+                  ${item.machine ? `<div>灌装机: ${item.machine}</div>` : ''}
+                  ${item.filling ? `<div>填充物: ${item.filling}</div>` : ''}
+                </div>
+              </div>
+              <div class="flex items-center space-x-4">
+                <div class="text-right">
+                  <div class="text-sm text-gray-600 mb-2">单价: ¥${(item.price || 0).toFixed(2)}</div>
+                  <div class="font-semibold text-green-600">小计: ¥${itemTotal.toFixed(2)}</div>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <button class="update-quantity-btn bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded" data-item-id="${item.id}" data-action="decrease">-</button>
+                  <input type="number" class="quantity-input w-16 text-center border border-gray-300 rounded py-1" value="${item.quantity}" min="1" data-item-id="${item.id}"/>
+                  <button class="update-quantity-btn bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded" data-item-id="${item.id}" data-action="increase">+</button>
+                </div>
+                <button class="remove-item-btn text-red-500 hover:text-red-700 px-3 py-1" data-item-id="${item.id}">
+                  <span class="iconify" data-icon="mdi:delete"></span>
+                </button>
+              </div>
+            </div>
+          `;
+        });
+        
+        html += `
+            </div>
+          </div>
+        `;
+      });
+      
+      cartContainer.innerHTML = html;
+      
+      // 绑定事件
+      document.querySelectorAll('.update-quantity-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const itemId = parseInt(btn.dataset.itemId);
+          const action = btn.dataset.action;
+          const input = document.querySelector(`.quantity-input[data-item-id="${itemId}"]`);
+          let quantity = parseInt(input.value) || 1;
+          
+          if (action === 'increase') {
+            quantity += 1;
+          } else if (action === 'decrease') {
+            quantity = Math.max(1, quantity - 1);
+          }
+          
+          input.value = quantity;
+          updateCartItemQuantity(itemId, quantity);
+        });
+      });
+      
+      document.querySelectorAll('.quantity-input').forEach(input => {
+        input.addEventListener('change', () => {
+          const itemId = parseInt(input.dataset.itemId);
+          const quantity = parseInt(input.value) || 1;
+          updateCartItemQuantity(itemId, quantity);
+        });
+      });
+      
+      document.querySelectorAll('.remove-item-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const itemId = parseInt(btn.dataset.itemId);
+          if (confirm('确定要删除这个商品吗？')) {
+            removeFromCart(itemId);
+          }
+        });
+      });
+      
+      // 绑定清空购物车按钮
+      const clearCartBtn = document.querySelector('#cartActions button.bg-gray-300');
+      if (clearCartBtn) {
+        clearCartBtn.onclick = () => {
+          if (confirm('确定要清空购物车吗？')) {
+            cart = [];
+            saveCart();
+          }
+        };
+      }
+    }
+    
+    // 初始化购物车
+    updateCartCount();
+    
+    // 数量增减函数
+    function increaseQuantity() {
+      const quantityEl = document.getElementById('orderQuantity');
+      if (quantityEl) {
+        quantityEl.value = parseInt(quantityEl.value || 1) + 1;
+      }
+    }
+    
+    function decreaseQuantity() {
+      const quantityEl = document.getElementById('orderQuantity');
+      if (quantityEl) {
+        const current = parseInt(quantityEl.value || 1);
+        quantityEl.value = Math.max(1, current - 1);
+      }
+    }
+    
+    // 购物车按钮点击事件
+    const cartBtn = document.getElementById('cartBtn');
+    if (cartBtn) {
+      cartBtn.addEventListener('click', () => {
+        // 直接显示购物车section
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('tab-active'));
+        const cartSection = document.getElementById('cart');
+        if (cartSection) {
+          cartSection.classList.add('tab-active');
+        }
+        renderCart();
+      });
     }
     
     // 标签页切换功能
