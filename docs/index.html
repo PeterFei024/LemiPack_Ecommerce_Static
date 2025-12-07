@@ -18,6 +18,11 @@
     .submenu-section { display: none; }
     .submenu-section-active { display: block; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .sku-table-row { transition: background-color 0.2s ease; }
+    .sku-table-row:hover { background-color: #eff6ff; }
+    #skuDetailContainer > div { animation: fadeIn 0.3s ease-in; }
+    #companyInfoModal > div { animation: slideUp 0.3s ease-out; }
   </style>
 </head>
 <body class="bg-gray-100">
@@ -26,21 +31,21 @@
 <div class="container mx-auto px-4 flex items-center justify-between h-full">
 <div class="flex items-center pl-0">
 <span class="iconify text-2xl" data-icon="mdi:package-variant"></span>
-<h1 class="text-lg font-bold ml-2">乐美包装</h1>
+<h1 class="text-lg font-bold ml-2 whitespace-nowrap">乐美包装</h1>
 </div>
 <nav class="flex items-center space-x-4 flex-1 justify-center">
-<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="home">首页</button>
-<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="configurator">订单配置</button>
-<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="orders">我的订单</button>
-<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="finance">财务信息</button>
-<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="design-management">画稿管理</button>
-<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="contact">联系我们</button>
+<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="home" data-i18n="nav.home">首页</button>
+<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="configurator" data-i18n="nav.configurator">订单配置</button>
+<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="orders" data-i18n="nav.orders">我的订单</button>
+<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="finance" data-i18n="nav.finance">财务信息</button>
+<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="design-management" data-i18n="nav.design-management">画稿管理</button>
+<button class="tab-btn py-2 px-3 rounded-lg hover:bg-blue-700 transition text-sm whitespace-nowrap" data-tab="contact" data-i18n="nav.contact">联系我们</button>
 </nav>
 <div class="flex items-center space-x-3 flex-shrink-0">
 <div class="relative">
-<input id="searchInput" class="bg-blue-700 rounded-full py-1.5 pl-3 pr-20 text-white placeholder-blue-200 w-64 text-sm" placeholder="搜索产品..." type="text"/>
+<input id="searchInput" class="bg-blue-700 rounded-full py-1.5 pl-3 pr-20 text-white placeholder-blue-200 w-64 text-sm" placeholder="搜索产品..." type="text" data-i18n="nav.search-placeholder"/>
 <span class="iconify absolute right-10 top-1.5 text-blue-200 text-sm pointer-events-none" data-icon="mdi:magnify"></span>
-<button id="imageSearchBtn" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-blue-200 hover:text-white transition cursor-pointer" title="图片搜索">
+<button id="imageSearchBtn" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-blue-200 hover:text-white transition cursor-pointer" data-i18n-title="nav.image-search" title="图片搜索">
 <span class="iconify text-sm" data-icon="mdi:camera"></span>
 </button>
 <!-- 图片粘贴区域 -->
@@ -71,20 +76,21 @@
 </div>
 </div>
 <button id="cartBtn" class="bg-green-600 hover:bg-green-500 text-white py-1.5 px-4 rounded-full flex items-center text-sm whitespace-nowrap relative">
-<span class="iconify mr-1 text-sm" data-icon="mdi:cart"></span>购物车
+<span class="iconify mr-1 text-sm" data-icon="mdi:cart"></span><span data-i18n="nav.cart">购物车</span>
 <span id="cartCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
         </button>
 <div class="relative">
 <select id="languageSelect" class="bg-blue-700 hover:bg-blue-600 text-white py-1.5 px-3 rounded-lg cursor-pointer appearance-none pr-6 border border-blue-600 text-sm">
 <option value="zh">中文</option>
 <option value="en">English</option>
-<option value="id">Bahasa Indonesia</option>
 </select>
 <span class="iconify absolute right-1 top-1.5 text-white pointer-events-none text-sm" data-icon="mdi:chevron-down"></span>
 </div>
-<div class="bg-blue-700 rounded-lg px-3 py-1.5 text-xs max-w-xs">
-<div class="text-white font-semibold whitespace-nowrap">章三</div>
-<div class="text-blue-200 text-xs truncate">收货地址: 昆山市新南西路369号 <button class="text-blue-300 hover:text-white underline ml-1">变更</button></div>
+<div class="bg-blue-700 rounded-lg px-3 py-1.5 text-xs max-w-xs cursor-pointer hover:bg-blue-600 transition group" id="companyInfoBtn" title="点击查看公司详细信息">
+<div class="text-white font-semibold whitespace-nowrap flex items-center">
+<span id="companyNameDisplay">章三包装有限公司</span>
+<span class="iconify ml-1 text-xs transition-transform group-hover:translate-y-0.5" data-icon="mdi:chevron-down"></span>
+</div>
 </div>
 </div>
 </div>
@@ -94,20 +100,20 @@
 <!-- 首页 -->
 <section class="tab-content tab-active" id="home">
 <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
-<h2 class="text-2xl font-bold text-blue-800 mb-6">公司介绍</h2>
+<h2 class="text-2xl font-bold text-blue-800 mb-6" data-i18n="home.company-intro">公司介绍</h2>
 <div class="flex items-center">
 <div class="w-2/3 pr-8">
-<p class="text-gray-700 mb-4 leading-relaxed">
+<p class="text-gray-700 mb-4 leading-relaxed" data-i18n="home.company-desc1">
               乐美包装是领先的包装材料解决方案提供商，专注于为食品饮料、电子产品等行业提供高质量包装产品。拥有超过10年行业经验，服务全球500+企业客户。
             </p>
-<p class="text-gray-700 mb-6 leading-relaxed">
+<p class="text-gray-700 mb-6 leading-relaxed" data-i18n="home.company-desc2">
               我们提供纸箱、泡沫、胶带等全品类包装材料，支持定制化设计和批量生产，满足不同行业的包装需求。
             </p>
 <div class="flex space-x-4">
-<button class="bg-blue-600 hover:bg-blue-500 text-white py-3 px-8 rounded-full font-semibold transition">
+<button class="bg-blue-600 hover:bg-blue-500 text-white py-3 px-8 rounded-full font-semibold transition" data-i18n="home.learn-more">
                 了解更多
               </button>
-<button class="bg-green-600 hover:bg-green-500 text-white py-3 px-8 rounded-full font-semibold transition">
+<button class="bg-green-600 hover:bg-green-500 text-white py-3 px-8 rounded-full font-semibold transition" data-i18n="home.free-sample">
                 免费样品
               </button>
 </div>
@@ -118,7 +124,7 @@
 </div>
 </div>
 <div class="bg-white rounded-2xl shadow-lg p-8">
-<h2 class="text-2xl font-bold text-blue-800 mb-6">热销产品</h2>
+<h2 class="text-2xl font-bold text-blue-800 mb-6" data-i18n="home.hot-products">热销产品</h2>
 <div class="grid grid-cols-3 gap-8">
 <!-- 产品卡片 -->
 <div class="product-card bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition hover:shadow-lg">
@@ -373,7 +379,7 @@
 <!-- 订单列表 -->
 <div id="ordersList">
 <div class="bg-white rounded-2xl shadow-lg p-8">
-<h2 class="text-2xl font-bold text-blue-800 mb-6">我的订单</h2>
+<h2 class="text-2xl font-bold text-blue-800 mb-6" data-i18n="orders.title">我的订单</h2>
 <div class="flex items-center justify-between mb-6">
 <div class="flex">
 <input class="bg-gray-50 border border-gray-300 rounded-l-lg px-4 py-2 w-64" placeholder="搜索订单号..." type="text"/>
@@ -566,220 +572,31 @@
 </div>
 </div>
 <!-- SKU列表 -->
-<div class="space-y-6 mb-6">
-<!-- SKU 1 -->
-<div class="bg-white rounded-xl border border-gray-200 p-6">
-<div class="grid grid-cols-2 gap-8">
-<!-- 左侧：产品图片 -->
-<div>
-<div class="bg-gray-100 rounded-xl p-4">
-<img alt="产品主图" class="w-full h-80 object-cover rounded-lg mb-3" id="orderMainImg1" src="customer_designs/OAT/FLOAT-1.jpg"/>
-<div class="flex space-x-2 overflow-x-auto">
-<img alt="细节图1" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg1').src=this.src" src="customer_designs/OAT/FLOAT-2.jpg"/>
-<img alt="细节图2" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg1').src=this.src" src="customer_designs/OAT/FLOAT-4.jpg"/>
-<img alt="细节图3" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg1').src=this.src" src="customer_designs/OAT/FLOAT-5.jpg"/>
-<img alt="细节图4" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg1').src=this.src" src="customer_designs/OAT/FLOAT-6.jpg"/>
+<div class="mb-6">
+<h4 class="font-semibold text-lg text-gray-800 mb-4">订单商品列表</h4>
+<div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full min-w-[800px]">
+<thead>
+<tr class="bg-gray-100 border-b border-gray-200">
+<th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">SKU名称</th>
+<th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">物料号</th>
+<th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">规格</th>
+<th class="px-4 py-3 text-right text-sm font-semibold text-gray-700">数量</th>
+<th class="px-4 py-3 text-right text-sm font-semibold text-gray-700">单价</th>
+<th class="px-4 py-3 text-right text-sm font-semibold text-gray-700">小计</th>
+<th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">操作</th>
+</tr>
+</thead>
+<tbody id="skuTableBody">
+<!-- SKU行将通过JavaScript动态生成 -->
+</tbody>
+</table>
 </div>
 </div>
-</div>
-<!-- 右侧：产品规格信息 -->
-<div>
-<div class="mb-4">
-<h5 class="font-semibold text-lg text-gray-800 mb-2">SKU #1: 饮料包装设计 #DRK-2023</h5>
-<div class="text-sm text-gray-600 mb-4">物料号: NP-20345-1</div>
-</div>
-<div class="bg-gray-50 rounded-lg p-4 mb-4">
-<h6 class="font-semibold text-gray-800 mb-3">产品规格</h6>
-<div class="grid grid-cols-2 gap-3 mb-3">
-<div>
-<label class="block text-gray-600 mb-1 text-xs">规格选择 (Format)</label>
-<div class="text-gray-800 font-medium text-sm">200S 160C*4.2U-Straw</div>
-</div>
-<div>
-<label class="block text-gray-600 mb-1 text-xs">材料结构</label>
-<div class="text-gray-800 font-medium text-sm">PE-Al-Paper</div>
-</div>
-</div>
-<h6 class="font-semibold text-gray-800 mb-3 mt-4">产品参数</h6>
-<div class="grid grid-cols-2 gap-3">
-<div>
-<label class="block text-gray-600 mb-1 text-xs">灌装机型号</label>
-<div class="text-gray-800 font-medium text-sm">Tetra Pak A3</div>
-</div>
-<div>
-<label class="block text-gray-600 mb-1 text-xs">填充物类型</label>
-<div class="text-gray-800 font-medium text-sm">UHT牛奶</div>
-</div>
-<div>
-<label class="block text-gray-600 mb-1 text-xs">原纸要求</label>
-<div class="text-gray-800 font-medium text-sm">FSC认证原纸</div>
-</div>
-<div>
-<label class="block text-gray-600 mb-1 text-xs">认证要求</label>
-<div class="flex space-x-2">
-<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">PEFC</span>
-<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">FSC</span>
-</div>
-</div>
-</div>
-</div>
-<div class="bg-blue-50 rounded-lg p-4">
-<div class="flex justify-between items-center mb-2">
-<span class="text-gray-600 text-sm">数量:</span>
-<span class="font-medium">100 箱</span>
-</div>
-<div class="flex justify-between items-center mb-2">
-<span class="text-gray-600 text-sm">单价:</span>
-<span class="font-medium">¥45.80/箱</span>
-</div>
-<div class="flex justify-between items-center pt-2 border-t border-blue-200">
-<span class="text-gray-600 font-semibold">小计:</span>
-<span class="font-bold text-green-600">¥4,900.00</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- SKU 2 -->
-<div class="bg-white rounded-xl border border-gray-200 p-6">
-<div class="grid grid-cols-2 gap-8">
-<!-- 左侧：产品图片 -->
-<div>
-<div class="bg-gray-100 rounded-xl p-4">
-<img alt="产品主图" class="w-full h-80 object-cover rounded-lg mb-3" id="orderMainImg2" src="customer_designs/Unikai/UNIKAI-4.jpg"/>
-<div class="flex space-x-2 overflow-x-auto">
-<img alt="细节图1" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg2').src=this.src" src="customer_designs/Unikai/UNIKAI-1.jpg"/>
-<img alt="细节图2" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg2').src=this.src" src="customer_designs/Unikai/UNIKAI-9.jpg"/>
-</div>
-</div>
-</div>
-<!-- 右侧：产品规格信息 -->
-<div>
-<div class="mb-4">
-<h5 class="font-semibold text-lg text-gray-800 mb-2">SKU #2: 乳品包装设计 #DARY-2024</h5>
-<div class="text-sm text-gray-600 mb-4">物料号: NP-20345-2</div>
-</div>
-<div class="bg-gray-50 rounded-lg p-4 mb-4">
-<h6 class="font-semibold text-gray-800 mb-3">产品规格</h6>
-<div class="grid grid-cols-2 gap-3 mb-3">
-<div>
-<label class="block text-gray-600 mb-1 text-xs">规格选择 (Format)</label>
-<div class="text-gray-800 font-medium text-sm">LBA1000B</div>
-</div>
-<div>
-<label class="block text-gray-600 mb-1 text-xs">材料结构</label>
-<div class="text-gray-800 font-medium text-sm">PET-Paper</div>
-</div>
-</div>
-<h6 class="font-semibold text-gray-800 mb-3 mt-4">产品参数</h6>
-<div class="grid grid-cols-2 gap-3">
-<div>
-<label class="block text-gray-600 mb-1 text-xs">灌装机型号</label>
-<div class="text-gray-800 font-medium text-sm">SIG CFA122</div>
-</div>
-<div>
-<label class="block text-gray-600 mb-1 text-xs">填充物类型</label>
-<div class="text-gray-800 font-medium text-sm">乳制品</div>
-</div>
-<div>
-<label class="block text-gray-600 mb-1 text-xs">原纸要求</label>
-<div class="text-gray-800 font-medium text-sm">标准原纸</div>
-</div>
-<div>
-<label class="block text-gray-600 mb-1 text-xs">认证要求</label>
-<div class="flex space-x-2">
-<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">FSC</span>
-</div>
-</div>
-</div>
-</div>
-<div class="bg-blue-50 rounded-lg p-4">
-<div class="flex justify-between items-center mb-2">
-<span class="text-gray-600 text-sm">数量:</span>
-<span class="font-medium">100 箱</span>
-</div>
-<div class="flex justify-between items-center mb-2">
-<span class="text-gray-600 text-sm">单价:</span>
-<span class="font-medium">¥48.00/箱</span>
-</div>
-<div class="flex justify-between items-center pt-2 border-t border-blue-200">
-<span class="text-gray-600 font-semibold">小计:</span>
-<span class="font-bold text-green-600">¥4,800.00</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- SKU 3 -->
-<div class="bg-white rounded-xl border border-gray-200 p-6">
-<div class="grid grid-cols-2 gap-8">
-<!-- 左侧：产品图片 -->
-<div>
-<div class="bg-gray-100 rounded-xl p-4">
-<img alt="产品主图" class="w-full h-80 object-cover rounded-lg mb-3" id="orderMainImg3" src="customer_designs/RFG/RFG-1.jpg"/>
-<div class="flex space-x-2 overflow-x-auto">
-<img alt="细节图1" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg3').src=this.src" src="customer_designs/RFG/RFG-2.jpg"/>
-<img alt="细节图2" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg3').src=this.src" src="customer_designs/RFG/RFG-3.jpg"/>
-<img alt="细节图3" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg3').src=this.src" src="customer_designs/RFG/RFG-4.jpg"/>
-</div>
-</div>
-</div>
-<!-- 右侧：产品规格信息 -->
-<div>
-<div class="mb-4">
-<h5 class="font-semibold text-lg text-gray-800 mb-2">SKU #3: 牛奶包装设计 #MILK-2024</h5>
-<div class="text-sm text-gray-600 mb-4">物料号: NP-20345-3</div>
-</div>
-<div class="bg-gray-50 rounded-lg p-4 mb-4">
-<h6 class="font-semibold text-gray-800 mb-3">产品规格</h6>
-<div class="grid grid-cols-2 gap-3 mb-3">
-<div>
-<label class="block text-gray-600 mb-1 text-xs">规格选择 (Format)</label>
-<div class="text-gray-800 font-medium text-sm">200S</div>
-</div>
-<div>
-<label class="block text-gray-600 mb-1 text-xs">材料结构</label>
-<div class="text-gray-800 font-medium text-sm">PE-Al-Paper</div>
-</div>
-</div>
-<h6 class="font-semibold text-gray-800 mb-3 mt-4">产品参数</h6>
-<div class="grid grid-cols-2 gap-3">
-<div>
-<label class="block text-gray-600 mb-1 text-xs">灌装机型号</label>
-<div class="text-gray-800 font-medium text-sm">Tetra Pak A3</div>
-</div>
-<div>
-<label class="block text-gray-600 mb-1 text-xs">填充物类型</label>
-<div class="text-gray-800 font-medium text-sm">UHT牛奶</div>
-</div>
-<div>
-<label class="block text-gray-600 mb-1 text-xs">原纸要求</label>
-<div class="text-gray-800 font-medium text-sm">FSC认证原纸</div>
-</div>
-<div>
-<label class="block text-gray-600 mb-1 text-xs">认证要求</label>
-<div class="flex space-x-2">
-<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">PEFC</span>
-<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">FSC</span>
-</div>
-</div>
-</div>
-</div>
-<div class="bg-blue-50 rounded-lg p-4">
-<div class="flex justify-between items-center mb-2">
-<span class="text-gray-600 text-sm">数量:</span>
-<span class="font-medium">100 箱</span>
-</div>
-<div class="flex justify-between items-center mb-2">
-<span class="text-gray-600 text-sm">单价:</span>
-<span class="font-medium">¥50.00/箱</span>
-</div>
-<div class="flex justify-between items-center pt-2 border-t border-blue-200">
-<span class="text-gray-600 font-semibold">小计:</span>
-<span class="font-bold text-green-600">¥5,000.00</span>
-</div>
-</div>
-</div>
+<!-- SKU详细信息展开区域 -->
+<div id="skuDetailContainer" class="mt-4 space-y-4">
+<!-- SKU详细信息将通过JavaScript动态生成，点击表格行展开 -->
 </div>
 </div>
 </div>
@@ -1271,7 +1088,708 @@
 </div>
 </section>
 </main>
+<!-- 公司信息详情模态框 -->
+<div id="companyInfoModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+<div class="bg-white rounded-2xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto mx-auto">
+<!-- 模态框头部 -->
+<div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl">
+<h2 class="text-xl font-bold text-gray-800">公司详细信息</h2>
+<button id="closeCompanyInfoModal" class="text-gray-400 hover:text-gray-600 transition">
+<span class="iconify text-2xl" data-icon="mdi:close"></span>
+</button>
+</div>
+<!-- 模态框内容 -->
+<div class="p-6">
+<!-- 公司名称（可编辑） -->
+<div class="mb-6">
+<label class="block text-gray-700 mb-2 font-medium">公司名称 <span class="text-red-500">*</span></label>
+<div class="flex items-center gap-3">
+<input type="text" id="companyNameInput" disabled class="flex-1 border border-gray-300 rounded-lg px-4 py-2 bg-gray-50 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:bg-white disabled:bg-gray-50 disabled:cursor-not-allowed" value="章三包装有限公司"/>
+<button id="editCompanyNameBtn" class="text-blue-600 hover:text-blue-800 font-medium flex items-center whitespace-nowrap">
+<span class="iconify mr-1" data-icon="mdi:pencil"></span>修改
+</button>
+</div>
+<div id="companyNameEditActions" class="hidden mt-2 flex gap-2">
+<button id="saveCompanyNameBtn" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition">保存</button>
+<button id="cancelCompanyNameBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition">取消</button>
+</div>
+</div>
+<!-- 税号 -->
+<div class="mb-6">
+<label class="block text-gray-700 mb-2 font-medium">税号</label>
+<div class="text-gray-800 bg-gray-50 rounded-lg px-4 py-2">91320583MA1N2P3Q4R</div>
+</div>
+<!-- 乐美销售负责人 -->
+<div class="mb-6">
+<label class="block text-gray-700 mb-2 font-medium">乐美销售负责人</label>
+<div class="text-gray-800 bg-gray-50 rounded-lg px-4 py-2">张经理 (电话: 138-0000-0000)</div>
+</div>
+<!-- 收货地址 -->
+<div class="mb-6">
+<label class="block text-gray-700 mb-2 font-medium">收货地址</label>
+<div class="text-gray-800 bg-gray-50 rounded-lg px-4 py-2">昆山市新南西路369号</div>
+</div>
+<!-- 联系人信息 -->
+<div class="mb-6">
+<label class="block text-gray-700 mb-2 font-medium">联系人信息</label>
+<div class="bg-gray-50 rounded-lg p-4 space-y-3">
+<div class="flex items-center flex-wrap">
+<span class="iconify text-blue-600 mr-2 text-lg" data-icon="mdi:account"></span>
+<span class="text-gray-700 font-medium mr-4 min-w-[100px]">联系人姓名:</span>
+<span class="text-gray-800">章三</span>
+</div>
+<div class="flex items-center flex-wrap">
+<span class="iconify text-blue-600 mr-2 text-lg" data-icon="mdi:phone"></span>
+<span class="text-gray-700 font-medium mr-4 min-w-[100px]">联系电话:</span>
+<a href="tel:138-0000-0000" class="text-blue-600 hover:text-blue-800 hover:underline">138-0000-0000</a>
+</div>
+<div class="flex items-center flex-wrap">
+<span class="iconify text-blue-600 mr-2 text-lg" data-icon="mdi:email"></span>
+<span class="text-gray-700 font-medium mr-4 min-w-[100px]">联系邮箱:</span>
+<a href="mailto:zhangsan@example.com" class="text-blue-600 hover:text-blue-800 hover:underline break-all">zhangsan@example.com</a>
+</div>
+</div>
+</div>
+</div>
+<!-- 模态框底部 -->
+<div class="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 flex justify-end gap-3 rounded-b-2xl">
+<button id="closeCompanyInfoModalBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 rounded-lg font-medium">关闭</button>
+</div>
+</div>
+</div>
 <script>
+    // ==================== 多语言翻译系统 ====================
+    // 翻译数据对象
+    const translations = {
+      zh: {
+        // 导航栏
+        'nav.home': '首页',
+        'nav.configurator': '订单配置',
+        'nav.orders': '我的订单',
+        'nav.finance': '财务信息',
+        'nav.design-management': '画稿管理',
+        'nav.contact': '联系我们',
+        'nav.cart': '购物车',
+        'nav.search-placeholder': '搜索产品...',
+        'nav.image-search': '图片搜索',
+        'nav.image-search-title': '图片搜索',
+        'nav.paste-image': '粘贴图片或拖拽图片到这里',
+        'nav.image-formats': '支持 JPG、PNG 格式',
+        'nav.search-similar': '搜索相似图片',
+        'nav.clear': '清除',
+        
+        // 首页
+        'home.company-intro': '公司介绍',
+        'home.company-desc1': '乐美包装是领先的包装材料解决方案提供商，专注于为食品饮料、电子产品等行业提供高质量包装产品。拥有超过10年行业经验，服务全球500+企业客户。',
+        'home.company-desc2': '我们提供纸箱、泡沫、胶带等全品类包装材料，支持定制化设计和批量生产，满足不同行业的包装需求。',
+        'home.learn-more': '了解更多',
+        'home.free-sample': '免费样品',
+        'home.hot-products': '热销产品',
+        'home.view-details': '详情',
+        'home.add-to-cart': '加入购物车',
+        
+        // 订单配置
+        'config.title': '订单配置工具',
+        'config.step1': '选择配置与设计',
+        'config.step2': '下单',
+        'config.filter-title': '筛选条件',
+        'config.filter-format': '规格选择 (Format)',
+        'config.filter-all-format': '全部规格',
+        'config.filter-machine': '灌装机型号',
+        'config.filter-all-machine': '全部型号',
+        'config.filter-filling': '填充物类型',
+        'config.filter-all-filling': '全部类型',
+        'config.filter-material': '材料结构',
+        'config.filter-all-material': '全部材料',
+        'config.filter-product-group': '产品组',
+        'config.filter-all-product-group': '全部产品组',
+        'config.filter-series': '系列',
+        'config.filter-all-series': '全部系列',
+        'config.filter-certification': '认证要求',
+        'config.search-placeholder': '搜索设计描述/产品代码...',
+        'config.select-design': '选择此设计',
+        'config.next': '下一步',
+        'config.prev': '上一步',
+        'config.product-info': '产品信息',
+        'config.product-name': '产品名称:',
+        'config.material-number': '物料号:',
+        'config.format': '规格:',
+        'config.material': '材料结构:',
+        'config.purchase-info': '采购信息',
+        'config.quantity': '数量',
+        'config.unit': '(单位: 箱)',
+        'config.delivery-date': '期望送达日期',
+        'config.special-requirements': '特殊要求',
+        'config.confirm-order': '确认下单',
+        
+        // 订单列表
+        'orders.title': '我的订单',
+        'orders.search-placeholder': '搜索订单号...',
+        'orders.all-status': '全部状态',
+        'orders.pending-review': '待审核',
+        'orders.pending-confirm': '待客户确认',
+        'orders.confirmed': '已确认',
+        'orders.completed': '已完成',
+        'orders.order-number': '订单号',
+        'orders.date': '日期',
+        'orders.product': '产品',
+        'orders.quantity': '数量',
+        'orders.amount': '金额',
+        'orders.status': '状态',
+        'orders.action': '操作',
+        'orders.view': '查看',
+        'orders.showing': '显示',
+        'orders.total': '共',
+        'orders.items': '条',
+        'orders.prev-page': '上一页',
+        'orders.next-page': '下一页',
+        
+        // 订单详情
+        'order-detail.title': '订单详情',
+        'order-detail.back': '返回订单列表',
+        'order-detail.status-flow': '订单状态流程',
+        'order-detail.ordered': '已下单',
+        'order-detail.pending-review': '待审核',
+        'order-detail.current-status': '当前状态',
+        'order-detail.pending-confirm': '待客户确认',
+        'order-detail.confirmed': '已确认',
+        'order-detail.completed': '已完成',
+        'order-detail.actions': '订单操作',
+        'order-detail.repurchase': '一键复购',
+        'order-detail.logistics': '查看订单物流信息',
+        'order-detail.modify': '发起修改申请',
+        'order-detail.complaint': '发起客诉',
+        'order-detail.export-order': '导出订单信息',
+        'order-detail.export-invoice': '导出发票信息',
+        'order-detail.basic-info': '订单基本信息',
+        'order-detail.order-number': '订单号',
+        'order-detail.order-time': '下单时间',
+        'order-detail.order-status': '订单状态',
+        'order-detail.total-amount': '订单总金额',
+        'order-detail.sku-count': 'SKU总数',
+        'order-detail.total-quantity': '总数量',
+        'order-detail.avg-price': '平均单价',
+        'order-detail.delivery-date': '期望送达日期',
+        'order-detail.product-list': '订单商品列表',
+        'order-detail.sku-name': 'SKU名称',
+        'order-detail.material-number': '物料号',
+        'order-detail.format': '规格',
+        'order-detail.unit-price': '单价',
+        'order-detail.subtotal': '小计',
+        'order-detail.view-details': '查看详情',
+        'order-detail.hide-details': '隐藏详情',
+        'order-detail.product-spec': '产品规格',
+        'order-detail.product-params': '产品参数',
+        'order-detail.machine-model': '灌装机型号',
+        'order-detail.filling-type': '填充物类型',
+        'order-detail.paper-requirement': '原纸要求',
+        'order-detail.certification': '认证要求',
+        
+        // 客诉
+        'complaint.title': '发起客诉',
+        'complaint.order-info': '订单信息',
+        'complaint.order-number': '订单号:',
+        'complaint.product-name': '产品名称:',
+        'complaint.type': '客诉类型',
+        'complaint.content': '客诉内容',
+        'complaint.upload': '上传凭证（可选）',
+        'complaint.upload-desc': '支持上传多张图片，格式：JPG、PNG，单张不超过5MB',
+        'complaint.cancel': '取消',
+        'complaint.submit': '提交客诉',
+        
+        // 财务信息
+        'finance.title': '财务信息',
+        'finance.ordered-amount': '已下单金额',
+        'finance.this-year': '本年度',
+        'finance.rebate-amount': '已返利金额',
+        'finance.due-soon': '即将到期的付款',
+        'finance.days': '30天内到期',
+        'finance.overdue': '已经到期的付款',
+        'finance.overdue-desc': '已逾期',
+        'finance.details': '财务明细',
+        'finance.export': '导出报表',
+        'finance.invoice-number': '发票编号',
+        'finance.invoice-time': '发票时间',
+        'finance.invoice-amount': '发票金额',
+        'finance.paid-amount': '发票已付金额',
+        'finance.unpaid-amount': '发票未付金额 (Outstanding)',
+        'finance.due-date': 'Due Date',
+        
+        // 画稿管理
+        'design.title': '画稿管理',
+        'design.upload': '上传新画稿',
+        'design.browse': '查看已有画稿',
+        'design.upload-preview': '上传预览文件',
+        'design.upload-preview-desc': '支持 JPG/PNG/PDF 格式<br/>用于AI解析和预览',
+        'design.select-file': '选择文件',
+        'design.upload-original': '上传原文件',
+        'design.upload-original-desc': '原始设计文件 (最大600MB)<br/>用于后续制作处理',
+        'design.ai-result': 'AI解析结果',
+        'design.ai-completed': '分析完成',
+        'design.filling-type': '填充物类型',
+        'design.capacity': '容量',
+        'design.punched': '是否打孔',
+        'design.yes': '是',
+        'design.no': '否',
+        'design.opening-device': '开启设备',
+        'design.color-target': '物理颜色目标',
+        'design.ai-match': 'AI分析判断：匹配到已有设计',
+        'design.ai-similarity': '检测到相似度92%的设计版本：100s型号-V7',
+        'design.view-match': '查看匹配设计',
+        'design.ai-accept': '您是否认可AI的分析？',
+        'design.new-design': '是新设计',
+        'design.existing-design': '是已有设计',
+        'design.not-sure': '不确认',
+        'design.additional-notes': '附加说明',
+        'design.contact-info': '联系人信息',
+        'design.email': '联系邮箱',
+        'design.backup-email': '备用邮箱',
+        'design.backup-email-placeholder': '选填备用邮箱',
+        'design.cancel': '取消',
+        'design.submit': '提交设计',
+        'design.version-library': '设计版本库',
+        'design.spec': '规格：',
+        'design.skus': '个SKU',
+        'design.versions': '个版本',
+        'design.current-version': '设计版本',
+        'design.history-version': '设计版本',
+        'design.current': '(当前版本)',
+        'design.history': '(历史版本)',
+        
+        // 联系我们
+        'contact.title': '联系我们',
+        'contact.company-info': '公司信息',
+        'contact.social-media': '社交媒体',
+        'contact.message': '在线留言',
+        'contact.your-name': '您的姓名',
+        'contact.company-name': '公司名称',
+        'contact.email': '电子邮箱',
+        'contact.inquiry-type': '咨询类型',
+        'contact.product-inquiry': '产品咨询',
+        'contact.technical-support': '技术支持',
+        'contact.cooperation': '合作建议',
+        'contact.other': '其他',
+        'contact.message-content': '消息内容',
+        'contact.submit': '提交留言',
+        
+        // 购物车
+        'cart.title': '购物车',
+        'cart.total-items': '共',
+        'cart.items': '件商品',
+        'cart.total': '总计:',
+        'cart.empty': '购物车是空的，快去添加商品吧！',
+        'cart.clear': '清空购物车',
+        'cart.checkout': '去结算',
+        
+        // 公司信息
+        'company.title': '公司详细信息',
+        'company.name': '公司名称',
+        'company.tax-number': '税号',
+        'company.sales-manager': '乐美销售负责人',
+        'company.delivery-address': '收货地址',
+        'company.contact-info': '联系人信息',
+        'company.contact-name': '联系人姓名:',
+        'company.contact-phone': '联系电话:',
+        'company.contact-email': '联系邮箱:',
+        'company.edit': '修改',
+        'company.save': '保存',
+        'company.cancel': '取消',
+        'company.close': '关闭',
+        'company.name-required': '公司名称不能为空',
+        'company.save-success': '公司名称修改成功！',
+        
+        // 通用
+        'common.loading': '加载中...',
+        'common.confirm': '确认',
+        'common.delete': '删除',
+        'common.edit': '编辑',
+        'common.save': '保存',
+        'common.cancel': '取消',
+        'common.close': '关闭',
+        'common.submit': '提交',
+        'common.search': '搜索',
+        'common.view': '查看',
+        'common.delete-confirm': '确定要删除这个商品吗？',
+        'common.clear-cart-confirm': '确定要清空购物车吗？',
+        'common.added-to-cart': '商品已成功加入购物车！',
+        'common.select-design-first': '请先选择商品设计',
+        'common.no-products': '没有找到符合条件的产品',
+        'common.spec': '规格:',
+        'common.products': '个产品',
+        'common.items': '个商品',
+      },
+      en: {
+        // Navigation
+        'nav.home': 'Home',
+        'nav.configurator': 'Order Configurator',
+        'nav.orders': 'My Orders',
+        'nav.finance': 'Finance',
+        'nav.design-management': 'Design Management',
+        'nav.contact': 'Contact Us',
+        'nav.cart': 'Shopping Cart',
+        'nav.search-placeholder': 'Search products...',
+        'nav.image-search': 'Image Search',
+        'nav.image-search-title': 'Image Search',
+        'nav.paste-image': 'Paste or drag image here',
+        'nav.image-formats': 'Supports JPG, PNG formats',
+        'nav.search-similar': 'Search Similar Images',
+        'nav.clear': 'Clear',
+        
+        // Home
+        'home.company-intro': 'Company Introduction',
+        'home.company-desc1': 'LemiPack is a leading packaging materials solution provider, focusing on providing high-quality packaging products for food & beverage, electronics and other industries. With over 10 years of industry experience, serving 500+ corporate customers worldwide.',
+        'home.company-desc2': 'We provide full range of packaging materials including cartons, foam, tape, etc., supporting customized design and mass production to meet packaging needs of different industries.',
+        'home.learn-more': 'Learn More',
+        'home.free-sample': 'Free Sample',
+        'home.hot-products': 'Hot Products',
+        'home.view-details': 'Details',
+        'home.add-to-cart': 'Add to Cart',
+        
+        // Order Configurator
+        'config.title': 'Order Configurator',
+        'config.step1': 'Select Configuration & Design',
+        'config.step2': 'Place Order',
+        'config.filter-title': 'Filters',
+        'config.filter-format': 'Format Selection',
+        'config.filter-all-format': 'All Formats',
+        'config.filter-machine': 'Filling Machine Model',
+        'config.filter-all-machine': 'All Models',
+        'config.filter-filling': 'Filling Type',
+        'config.filter-all-filling': 'All Types',
+        'config.filter-material': 'Material Structure',
+        'config.filter-all-material': 'All Materials',
+        'config.filter-product-group': 'Product Group',
+        'config.filter-all-product-group': 'All Product Groups',
+        'config.filter-series': 'Series',
+        'config.filter-all-series': 'All Series',
+        'config.filter-certification': 'Certification Requirements',
+        'config.search-placeholder': 'Search design description/product code...',
+        'config.select-design': 'Select This Design',
+        'config.next': 'Next',
+        'config.prev': 'Previous',
+        'config.product-info': 'Product Information',
+        'config.product-name': 'Product Name:',
+        'config.material-number': 'Material Number:',
+        'config.format': 'Format:',
+        'config.material': 'Material Structure:',
+        'config.purchase-info': 'Purchase Information',
+        'config.quantity': 'Quantity',
+        'config.unit': '(Unit: Case)',
+        'config.delivery-date': 'Expected Delivery Date',
+        'config.special-requirements': 'Special Requirements',
+        'config.confirm-order': 'Confirm Order',
+        
+        // Orders
+        'orders.title': 'My Orders',
+        'orders.search-placeholder': 'Search order number...',
+        'orders.all-status': 'All Status',
+        'orders.pending-review': 'Pending Review',
+        'orders.pending-confirm': 'Pending Customer Confirmation',
+        'orders.confirmed': 'Confirmed',
+        'orders.completed': 'Completed',
+        'orders.order-number': 'Order Number',
+        'orders.date': 'Date',
+        'orders.product': 'Product',
+        'orders.quantity': 'Quantity',
+        'orders.amount': 'Amount',
+        'orders.status': 'Status',
+        'orders.action': 'Action',
+        'orders.view': 'View',
+        'orders.showing': 'Showing',
+        'orders.total': 'Total',
+        'orders.items': 'items',
+        'orders.prev-page': 'Previous',
+        'orders.next-page': 'Next',
+        
+        // Order Detail
+        'order-detail.title': 'Order Details',
+        'order-detail.back': 'Back to Order List',
+        'order-detail.status-flow': 'Order Status Flow',
+        'order-detail.ordered': 'Ordered',
+        'order-detail.pending-review': 'Pending Review',
+        'order-detail.current-status': 'Current Status',
+        'order-detail.pending-confirm': 'Pending Customer Confirmation',
+        'order-detail.confirmed': 'Confirmed',
+        'order-detail.completed': 'Completed',
+        'order-detail.actions': 'Order Actions',
+        'order-detail.repurchase': 'One-Click Repurchase',
+        'order-detail.logistics': 'View Logistics',
+        'order-detail.modify': 'Request Modification',
+        'order-detail.complaint': 'File Complaint',
+        'order-detail.export-order': 'Export Order Info',
+        'order-detail.export-invoice': 'Export Invoice',
+        'order-detail.basic-info': 'Basic Order Information',
+        'order-detail.order-number': 'Order Number',
+        'order-detail.order-time': 'Order Time',
+        'order-detail.order-status': 'Order Status',
+        'order-detail.total-amount': 'Total Amount',
+        'order-detail.sku-count': 'Total SKUs',
+        'order-detail.total-quantity': 'Total Quantity',
+        'order-detail.avg-price': 'Average Unit Price',
+        'order-detail.delivery-date': 'Expected Delivery Date',
+        'order-detail.product-list': 'Order Product List',
+        'order-detail.sku-name': 'SKU Name',
+        'order-detail.material-number': 'Material Number',
+        'order-detail.format': 'Format',
+        'order-detail.unit-price': 'Unit Price',
+        'order-detail.subtotal': 'Subtotal',
+        'order-detail.view-details': 'View Details',
+        'order-detail.hide-details': 'Hide Details',
+        'order-detail.product-spec': 'Product Specifications',
+        'order-detail.product-params': 'Product Parameters',
+        'order-detail.machine-model': 'Filling Machine Model',
+        'order-detail.filling-type': 'Filling Type',
+        'order-detail.paper-requirement': 'Paper Requirement',
+        'order-detail.certification': 'Certification Requirements',
+        
+        // Complaint
+        'complaint.title': 'File Complaint',
+        'complaint.order-info': 'Order Information',
+        'complaint.order-number': 'Order Number:',
+        'complaint.product-name': 'Product Name:',
+        'complaint.type': 'Complaint Type',
+        'complaint.content': 'Complaint Content',
+        'complaint.upload': 'Upload Evidence (Optional)',
+        'complaint.upload-desc': 'Supports multiple images, formats: JPG, PNG, max 5MB per image',
+        'complaint.cancel': 'Cancel',
+        'complaint.submit': 'Submit Complaint',
+        
+        // Finance
+        'finance.title': 'Finance Information',
+        'finance.ordered-amount': 'Ordered Amount',
+        'finance.this-year': 'This Year',
+        'finance.rebate-amount': 'Rebate Amount',
+        'finance.due-soon': 'Payment Due Soon',
+        'finance.days': 'Due in 30 days',
+        'finance.overdue': 'Overdue Payment',
+        'finance.overdue-desc': 'Overdue',
+        'finance.details': 'Finance Details',
+        'finance.export': 'Export Report',
+        'finance.invoice-number': 'Invoice Number',
+        'finance.invoice-time': 'Invoice Time',
+        'finance.invoice-amount': 'Invoice Amount',
+        'finance.paid-amount': 'Paid Amount',
+        'finance.unpaid-amount': 'Unpaid Amount (Outstanding)',
+        'finance.due-date': 'Due Date',
+        
+        // Design Management
+        'design.title': 'Design Management',
+        'design.upload': 'Upload New Design',
+        'design.browse': 'Browse Existing Designs',
+        'design.upload-preview': 'Upload Preview File',
+        'design.upload-preview-desc': 'Supports JPG/PNG/PDF formats<br/>For AI parsing and preview',
+        'design.select-file': 'Select File',
+        'design.upload-original': 'Upload Original File',
+        'design.upload-original-desc': 'Original design file (max 600MB)<br/>For production processing',
+        'design.ai-result': 'AI Analysis Result',
+        'design.ai-completed': 'Analysis Completed',
+        'design.filling-type': 'Filling Type',
+        'design.capacity': 'Capacity',
+        'design.punched': 'Punched',
+        'design.yes': 'Yes',
+        'design.no': 'No',
+        'design.opening-device': 'Opening Device',
+        'design.color-target': 'Physical Color Target',
+        'design.ai-match': 'AI Analysis: Matched existing design',
+        'design.ai-similarity': 'Detected 92% similar design version: 100s model-V7',
+        'design.view-match': 'View Matched Design',
+        'design.ai-accept': 'Do you accept AI analysis?',
+        'design.new-design': 'New Design',
+        'design.existing-design': 'Existing Design',
+        'design.not-sure': 'Not Sure',
+        'design.additional-notes': 'Additional Notes',
+        'design.contact-info': 'Contact Information',
+        'design.email': 'Contact Email',
+        'design.backup-email': 'Backup Email',
+        'design.backup-email-placeholder': 'Optional backup email',
+        'design.cancel': 'Cancel',
+        'design.submit': 'Submit Design',
+        'design.version-library': 'Design Version Library',
+        'design.spec': 'Specification:',
+        'design.skus': 'SKUs',
+        'design.versions': 'versions',
+        'design.current-version': 'Design Version',
+        'design.history-version': 'Design Version',
+        'design.current': '(Current Version)',
+        'design.history': '(History Version)',
+        
+        // Contact
+        'contact.title': 'Contact Us',
+        'contact.company-info': 'Company Information',
+        'contact.social-media': 'Social Media',
+        'contact.message': 'Online Message',
+        'contact.your-name': 'Your Name',
+        'contact.company-name': 'Company Name',
+        'contact.email': 'Email',
+        'contact.inquiry-type': 'Inquiry Type',
+        'contact.product-inquiry': 'Product Inquiry',
+        'contact.technical-support': 'Technical Support',
+        'contact.cooperation': 'Cooperation Proposal',
+        'contact.other': 'Other',
+        'contact.message-content': 'Message Content',
+        'contact.submit': 'Submit Message',
+        
+        // Shopping Cart
+        'cart.title': 'Shopping Cart',
+        'cart.total-items': 'Total',
+        'cart.items': 'items',
+        'cart.total': 'Total:',
+        'cart.empty': 'Your cart is empty, go add some products!',
+        'cart.clear': 'Clear Cart',
+        'cart.checkout': 'Checkout',
+        
+        // Company Info
+        'company.title': 'Company Details',
+        'company.name': 'Company Name',
+        'company.tax-number': 'Tax Number',
+        'company.sales-manager': 'LemiPack Sales Manager',
+        'company.delivery-address': 'Delivery Address',
+        'company.contact-info': 'Contact Information',
+        'company.contact-name': 'Contact Name:',
+        'company.contact-phone': 'Contact Phone:',
+        'company.contact-email': 'Contact Email:',
+        'company.edit': 'Edit',
+        'company.save': 'Save',
+        'company.cancel': 'Cancel',
+        'company.close': 'Close',
+        'company.name-required': 'Company name cannot be empty',
+        'company.save-success': 'Company name updated successfully!',
+        
+        // Common
+        'common.loading': 'Loading...',
+        'common.confirm': 'Confirm',
+        'common.delete': 'Delete',
+        'common.edit': 'Edit',
+        'common.save': 'Save',
+        'common.cancel': 'Cancel',
+        'common.close': 'Close',
+        'common.submit': 'Submit',
+        'common.search': 'Search',
+        'common.view': 'View',
+        'common.delete-confirm': 'Are you sure you want to delete this item?',
+        'common.clear-cart-confirm': 'Are you sure you want to clear the cart?',
+        'common.added-to-cart': 'Item added to cart successfully!',
+        'common.select-design-first': 'Please select a product design first',
+        'common.no-products': 'No products found matching your criteria',
+        'common.spec': 'Specification:',
+        'common.products': 'products',
+        'common.items': 'items',
+      }
+    };
+    
+    // 当前语言，默认中文
+    let currentLanguage = localStorage.getItem('language') || 'zh';
+    
+    // 翻译函数
+    function t(key) {
+      return translations[currentLanguage][key] || translations['zh'][key] || key;
+    }
+    
+    // 更新页面翻译
+    function updateTranslations() {
+      // 更新所有带有data-i18n属性的元素
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        const translation = t(key);
+        
+        // 如果是input的placeholder
+        if (element.tagName === 'INPUT' && element.type !== 'submit' && element.type !== 'button') {
+          element.placeholder = translation;
+        }
+        // 如果是span或其他内联元素，直接更新文本
+        else if (element.tagName === 'SPAN' || element.tagName === 'DIV' || element.tagName === 'P' || element.tagName === 'H1' || element.tagName === 'H2' || element.tagName === 'H3' || element.tagName === 'H4' || element.tagName === 'H5' || element.tagName === 'H6' || element.tagName === 'LABEL') {
+          // 如果有子元素是图标，保留图标
+          const icons = element.querySelectorAll('.iconify');
+          if (icons.length > 0) {
+            // 找到所有文本节点
+            const textNodes = Array.from(element.childNodes).filter(node => 
+              node.nodeType === Node.TEXT_NODE && node.textContent.trim()
+            );
+            // 更新第一个文本节点
+            if (textNodes.length > 0) {
+              textNodes[0].textContent = ' ' + translation;
+            } else {
+              // 如果没有文本节点，在最后一个图标后添加
+              const lastIcon = icons[icons.length - 1];
+              lastIcon.after(' ' + translation);
+            }
+          } else {
+            element.textContent = translation;
+          }
+        }
+        // 如果是button或submit类型的input
+        else if (element.tagName === 'BUTTON' || element.type === 'submit' || element.type === 'button') {
+          // 保留图标，只更新文字
+          const icons = element.querySelectorAll('.iconify');
+          if (icons.length > 0) {
+            // 有图标的情况，找到所有文本节点并更新
+            const textNodes = Array.from(element.childNodes).filter(node => 
+              node.nodeType === Node.TEXT_NODE
+            );
+            // 移除所有文本节点
+            textNodes.forEach(node => node.remove());
+            // 在最后一个图标后添加翻译文本
+            const lastIcon = icons[icons.length - 1];
+            if (lastIcon.nextSibling && lastIcon.nextSibling.nodeType === Node.TEXT_NODE) {
+              lastIcon.nextSibling.textContent = ' ' + translation;
+            } else {
+              lastIcon.after(' ' + translation);
+            }
+          } else {
+            element.textContent = translation;
+          }
+        }
+        // 其他情况直接更新文本内容
+        else {
+          element.textContent = translation;
+        }
+      });
+      
+      // 更新title属性
+      document.querySelectorAll('[data-i18n-title]').forEach(element => {
+        const key = element.getAttribute('data-i18n-title');
+        element.title = t(key);
+      });
+      
+      // 更新alt属性
+      document.querySelectorAll('[data-i18n-alt]').forEach(element => {
+        const key = element.getAttribute('data-i18n-alt');
+        element.alt = t(key);
+      });
+      
+      // 更新语言选择器的值
+      const languageSelect = document.getElementById('languageSelect');
+      if (languageSelect) {
+        languageSelect.value = currentLanguage;
+      }
+      
+      // 保存语言设置
+      localStorage.setItem('language', currentLanguage);
+    }
+    
+    // 切换语言
+    function changeLanguage(lang) {
+      if (translations[lang]) {
+        currentLanguage = lang;
+        updateTranslations();
+      }
+    }
+    
+    // 初始化翻译
+    document.addEventListener('DOMContentLoaded', () => {
+      updateTranslations();
+      
+      // 绑定语言选择器事件
+      const languageSelect = document.getElementById('languageSelect');
+      if (languageSelect) {
+        languageSelect.addEventListener('change', (e) => {
+          changeLanguage(e.target.value);
+        });
+      }
+    });
+    
+    // ==================== 翻译系统结束 ====================
+    
     // 存储选中的设计图片URL
     let selectedDesignImage = null;
     
@@ -1966,6 +2484,265 @@
       });
     });
     
+    // 订单SKU数据（示例数据，实际应该从API获取）
+    const orderSKUData = [
+      {
+        id: 1,
+        name: "饮料包装设计 #DRK-2023",
+        materialNumber: "NP-20345-1",
+        format: "200S 160C*4.2U-Straw",
+        material: "PE-Al-Paper",
+        machine: "Tetra Pak A3",
+        filling: "UHT牛奶",
+        paperRequirement: "FSC认证原纸",
+        certifications: ["PEFC", "FSC"],
+        quantity: 100,
+        unit: "箱",
+        unitPrice: 45.80,
+        subtotal: 4900.00,
+        mainImage: "customer_designs/OAT/FLOAT-1.jpg",
+        detailImages: [
+          "customer_designs/OAT/FLOAT-2.jpg",
+          "customer_designs/OAT/FLOAT-4.jpg",
+          "customer_designs/OAT/FLOAT-5.jpg",
+          "customer_designs/OAT/FLOAT-6.jpg"
+        ]
+      },
+      {
+        id: 2,
+        name: "乳品包装设计 #DARY-2024",
+        materialNumber: "NP-20345-2",
+        format: "LBA1000B",
+        material: "PET-Paper",
+        machine: "SIG CFA122",
+        filling: "乳制品",
+        paperRequirement: "标准原纸",
+        certifications: ["FSC"],
+        quantity: 100,
+        unit: "箱",
+        unitPrice: 48.00,
+        subtotal: 4800.00,
+        mainImage: "customer_designs/Unikai/UNIKAI-4.jpg",
+        detailImages: [
+          "customer_designs/Unikai/UNIKAI-1.jpg",
+          "customer_designs/Unikai/UNIKAI-9.jpg"
+        ]
+      },
+      {
+        id: 3,
+        name: "牛奶包装设计 #MILK-2024",
+        materialNumber: "NP-20345-3",
+        format: "200S",
+        material: "PE-Al-Paper",
+        machine: "Tetra Pak A3",
+        filling: "UHT牛奶",
+        paperRequirement: "FSC认证原纸",
+        certifications: ["PEFC", "FSC"],
+        quantity: 100,
+        unit: "箱",
+        unitPrice: 50.00,
+        subtotal: 5000.00,
+        mainImage: "customer_designs/RFG/RFG-1.jpg",
+        detailImages: [
+          "customer_designs/RFG/RFG-2.jpg",
+          "customer_designs/RFG/RFG-3.jpg",
+          "customer_designs/RFG/RFG-4.jpg"
+        ]
+      }
+    ];
+    
+    // 渲染SKU表格
+    function renderSKUTable(skuData) {
+      const tbody = document.getElementById('skuTableBody');
+      const container = document.getElementById('skuDetailContainer');
+      if (!tbody) return;
+      
+      // 清空之前的详情
+      if (container) {
+        container.innerHTML = '';
+      }
+      
+      tbody.innerHTML = skuData.map((sku, index) => `
+        <tr class="border-b border-gray-200 hover:bg-blue-50 transition cursor-pointer sku-table-row group" data-sku-id="${sku.id}">
+          <td class="px-4 py-3 text-sm text-gray-800 font-medium">${sku.name}</td>
+          <td class="px-4 py-3 text-sm text-gray-600">${sku.materialNumber}</td>
+          <td class="px-4 py-3 text-sm text-gray-600">${sku.format}</td>
+          <td class="px-4 py-3 text-sm text-gray-800 text-right">${sku.quantity} ${sku.unit}</td>
+          <td class="px-4 py-3 text-sm text-gray-800 text-right">¥${sku.unitPrice.toFixed(2)}/${sku.unit}</td>
+          <td class="px-4 py-3 text-sm font-semibold text-green-600 text-right">¥${sku.subtotal.toFixed(2)}</td>
+          <td class="px-4 py-3 text-center">
+            <button class="view-sku-detail-btn text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 rounded hover:bg-blue-100 transition" data-sku-id="${sku.id}">
+              <span class="iconify inline-block" data-icon="mdi:chevron-down"></span> 查看详情
+            </button>
+          </td>
+        </tr>
+      `).join('');
+      
+      // 绑定点击事件 - 整行和按钮都可以点击
+      document.querySelectorAll('.sku-table-row').forEach(row => {
+        row.addEventListener('click', (e) => {
+          // 如果点击的是按钮，不阻止默认行为
+          if (e.target.closest('.view-sku-detail-btn')) {
+            return;
+          }
+          const skuId = parseInt(row.dataset.skuId);
+          if (skuId) {
+            toggleSKUDetail(skuId, skuData);
+          }
+        });
+      });
+      
+      // 单独绑定按钮点击事件
+      document.querySelectorAll('.view-sku-detail-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const skuId = parseInt(btn.dataset.skuId);
+          if (skuId) {
+            toggleSKUDetail(skuId, skuData);
+          }
+        });
+      });
+    }
+    
+    // 切换SKU详情显示
+    function toggleSKUDetail(skuId, skuData) {
+      const sku = skuData.find(s => s.id === skuId);
+      if (!sku) return;
+      
+      const container = document.getElementById('skuDetailContainer');
+      if (!container) return;
+      
+      const detailId = `sku-detail-${skuId}`;
+      let detailElement = document.getElementById(detailId);
+      const btn = document.querySelector(`.view-sku-detail-btn[data-sku-id="${skuId}"]`);
+      const row = document.querySelector(`.sku-table-row[data-sku-id="${skuId}"]`);
+      
+      if (detailElement) {
+        // 如果已存在，则切换显示/隐藏
+        const isHidden = detailElement.classList.contains('hidden');
+        detailElement.classList.toggle('hidden');
+        
+        // 更新按钮和行的样式
+        if (btn) {
+          const icon = isHidden ? 'mdi:chevron-up' : 'mdi:chevron-down';
+          btn.innerHTML = `<span class="iconify inline-block transition-transform" data-icon="${icon}"></span> ${isHidden ? '隐藏详情' : '查看详情'}`;
+        }
+        if (row) {
+          if (isHidden) {
+            row.classList.add('bg-blue-50');
+          } else {
+            row.classList.remove('bg-blue-50');
+          }
+        }
+        
+        // 滚动到详情区域
+        if (isHidden) {
+          setTimeout(() => {
+            detailElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 100);
+        }
+      } else {
+        // 创建新的详情元素
+        detailElement = document.createElement('div');
+        detailElement.id = detailId;
+        detailElement.className = 'bg-white rounded-xl border border-gray-200 p-6 shadow-sm';
+        
+        const certificationsHtml = sku.certifications && sku.certifications.length > 0 
+          ? sku.certifications.map(cert => 
+              `<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">${cert}</span>`
+            ).join('')
+          : '<span class="text-gray-400 text-xs">无</span>';
+        
+        const detailImagesHtml = sku.detailImages && sku.detailImages.length > 0
+          ? sku.detailImages.map((img, idx) => 
+              `<img alt="细节图${idx + 1}" class="w-20 h-20 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-blue-600 transition" onclick="document.getElementById('orderMainImg${skuId}').src=this.src" src="${img}"/>`
+            ).join('')
+          : '';
+        
+        detailElement.innerHTML = `
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- 左侧：产品图片 -->
+            <div>
+              <div class="bg-gray-100 rounded-xl p-4">
+                <img alt="产品主图" class="w-full h-80 object-cover rounded-lg mb-3" id="orderMainImg${skuId}" src="${sku.mainImage || 'customer_designs/RFG/RFG-1.jpg'}"/>
+                ${detailImagesHtml ? `<div class="flex space-x-2 overflow-x-auto">${detailImagesHtml}</div>` : ''}
+              </div>
+            </div>
+            <!-- 右侧：产品规格信息 -->
+            <div>
+              <div class="mb-4">
+                <h5 class="font-semibold text-lg text-gray-800 mb-2">SKU #${sku.id}: ${sku.name}</h5>
+                <div class="text-sm text-gray-600 mb-4">物料号: ${sku.materialNumber}</div>
+              </div>
+              <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                <h6 class="font-semibold text-gray-800 mb-3">产品规格</h6>
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                  <div>
+                    <label class="block text-gray-600 mb-1 text-xs">规格选择 (Format)</label>
+                    <div class="text-gray-800 font-medium text-sm">${sku.format}</div>
+                  </div>
+                  <div>
+                    <label class="block text-gray-600 mb-1 text-xs">材料结构</label>
+                    <div class="text-gray-800 font-medium text-sm">${sku.material}</div>
+                  </div>
+                </div>
+                <h6 class="font-semibold text-gray-800 mb-3 mt-4">产品参数</h6>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-gray-600 mb-1 text-xs">灌装机型号</label>
+                    <div class="text-gray-800 font-medium text-sm">${sku.machine}</div>
+                  </div>
+                  <div>
+                    <label class="block text-gray-600 mb-1 text-xs">填充物类型</label>
+                    <div class="text-gray-800 font-medium text-sm">${sku.filling}</div>
+                  </div>
+                  <div>
+                    <label class="block text-gray-600 mb-1 text-xs">原纸要求</label>
+                    <div class="text-gray-800 font-medium text-sm">${sku.paperRequirement || '标准原纸'}</div>
+                  </div>
+                  <div>
+                    <label class="block text-gray-600 mb-1 text-xs">认证要求</label>
+                    <div class="flex flex-wrap gap-2">
+                      ${certificationsHtml}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-blue-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-gray-600 text-sm">数量:</span>
+                  <span class="font-medium">${sku.quantity} ${sku.unit}</span>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-gray-600 text-sm">单价:</span>
+                  <span class="font-medium">¥${sku.unitPrice.toFixed(2)}/${sku.unit}</span>
+                </div>
+                <div class="flex justify-between items-center pt-2 border-t border-blue-200">
+                  <span class="text-gray-600 font-semibold">小计:</span>
+                  <span class="font-bold text-green-600">¥${sku.subtotal.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        container.appendChild(detailElement);
+        
+        // 更新按钮和行的样式
+        if (btn) {
+          btn.innerHTML = `<span class="iconify inline-block transition-transform" data-icon="mdi:chevron-up"></span> 隐藏详情`;
+        }
+        if (row) {
+          row.classList.add('bg-blue-50');
+        }
+        
+        // 滚动到详情区域
+        setTimeout(() => {
+          detailElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+      }
+    }
+    
     // 订单详情section控制
     const ordersList = document.getElementById('ordersList');
     const orderDetail = document.getElementById('orderDetail');
@@ -1988,6 +2765,15 @@
         orderDetail.classList.remove('hidden');
         orderDetailContent.classList.remove('hidden');
         complaintPage.classList.add('hidden');
+        
+        // 清除之前的详情展开状态
+        const container = document.getElementById('skuDetailContainer');
+        if (container) {
+          container.innerHTML = '';
+        }
+        
+        // 渲染SKU表格
+        renderSKUTable(orderSKUData);
       });
     });
     
@@ -2199,6 +2985,147 @@
       const i = Math.floor(Math.log(bytes) / Math.log(k));
       return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
+    
+    // 公司信息模态框功能
+    (function() {
+      const companyInfoBtn = document.getElementById('companyInfoBtn');
+      const companyInfoModal = document.getElementById('companyInfoModal');
+      const closeCompanyInfoModal = document.getElementById('closeCompanyInfoModal');
+      const closeCompanyInfoModalBtn = document.getElementById('closeCompanyInfoModalBtn');
+      const companyNameInput = document.getElementById('companyNameInput');
+      const companyNameDisplay = document.getElementById('companyNameDisplay');
+      const editCompanyNameBtn = document.getElementById('editCompanyNameBtn');
+      const saveCompanyNameBtn = document.getElementById('saveCompanyNameBtn');
+      const cancelCompanyNameBtn = document.getElementById('cancelCompanyNameBtn');
+      const companyNameEditActions = document.getElementById('companyNameEditActions');
+      
+      let originalCompanyName = companyNameInput ? companyNameInput.value : '';
+      
+      // 打开模态框
+      if (companyInfoBtn && companyInfoModal) {
+        companyInfoBtn.addEventListener('click', () => {
+          companyInfoModal.classList.remove('hidden');
+          // 重置编辑状态
+          if (companyNameInput) {
+            companyNameInput.disabled = true;
+            companyNameInput.value = originalCompanyName;
+          }
+          if (companyNameEditActions) {
+            companyNameEditActions.classList.add('hidden');
+          }
+        });
+      }
+      
+      // 关闭模态框
+      function closeModal() {
+        if (companyInfoModal) {
+          companyInfoModal.classList.add('hidden');
+        }
+        // 重置编辑状态
+        if (companyNameInput) {
+          companyNameInput.disabled = true;
+          companyNameInput.value = originalCompanyName;
+          companyNameInput.classList.remove('bg-white');
+          companyNameInput.classList.add('bg-gray-50', 'cursor-not-allowed');
+        }
+        if (companyNameEditActions) {
+          companyNameEditActions.classList.add('hidden');
+        }
+      }
+      
+      if (closeCompanyInfoModal) {
+        closeCompanyInfoModal.addEventListener('click', closeModal);
+      }
+      
+      if (closeCompanyInfoModalBtn) {
+        closeCompanyInfoModalBtn.addEventListener('click', closeModal);
+      }
+      
+      // 点击模态框外部关闭
+      if (companyInfoModal) {
+        companyInfoModal.addEventListener('click', (e) => {
+          if (e.target === companyInfoModal) {
+            closeModal();
+          }
+        });
+      }
+      
+      // 编辑公司名称
+      if (editCompanyNameBtn && companyNameInput) {
+        editCompanyNameBtn.addEventListener('click', () => {
+          companyNameInput.disabled = false;
+          companyNameInput.classList.remove('bg-gray-50', 'cursor-not-allowed');
+          companyNameInput.classList.add('bg-white');
+          companyNameInput.focus();
+          companyNameInput.select();
+          if (companyNameEditActions) {
+            companyNameEditActions.classList.remove('hidden');
+          }
+        });
+      }
+      
+      // 保存公司名称
+      if (saveCompanyNameBtn && companyNameInput && companyNameDisplay) {
+        saveCompanyNameBtn.addEventListener('click', () => {
+          const newName = companyNameInput.value.trim();
+          if (!newName) {
+            alert('公司名称不能为空');
+            companyNameInput.focus();
+            return;
+          }
+          
+          // 这里应该调用API保存公司名称
+          // 示例：await updateCompanyName(newName);
+          // 实际使用时，可以这样：
+          // try {
+          //   const response = await fetch('/api/company/name', {
+          //     method: 'PUT',
+          //     headers: { 'Content-Type': 'application/json' },
+          //     body: JSON.stringify({ companyName: newName })
+          // });
+          //   if (!response.ok) throw new Error('保存失败');
+          // } catch (error) {
+          //   alert('保存失败，请稍后重试');
+          //   return;
+          // }
+          
+          // 更新显示
+          originalCompanyName = newName;
+          companyNameDisplay.textContent = newName;
+          
+          // 禁用输入框并隐藏操作按钮
+          companyNameInput.disabled = true;
+          companyNameInput.classList.remove('bg-white');
+          companyNameInput.classList.add('bg-gray-50', 'cursor-not-allowed');
+          if (companyNameEditActions) {
+            companyNameEditActions.classList.add('hidden');
+          }
+          
+          // 显示成功提示
+          alert('公司名称修改成功！');
+        });
+      }
+      
+      // 取消编辑公司名称
+      if (cancelCompanyNameBtn && companyNameInput) {
+        cancelCompanyNameBtn.addEventListener('click', () => {
+          companyNameInput.value = originalCompanyName;
+          companyNameInput.disabled = true;
+          companyNameInput.classList.remove('bg-white');
+          companyNameInput.classList.add('bg-gray-50', 'cursor-not-allowed');
+          if (companyNameEditActions) {
+            companyNameEditActions.classList.add('hidden');
+          }
+        });
+      }
+      
+      // ESC键关闭模态框
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && companyInfoModal && !companyInfoModal.classList.contains('hidden')) {
+          closeModal();
+        }
+      });
+    })();
   </script>
 </body>
 </html>
